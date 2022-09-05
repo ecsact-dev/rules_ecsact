@@ -2,24 +2,24 @@
 workspace(
     # If your ruleset is "official"
     # (i.e. is in the bazelbuild GitHub org)
-    # then this should just be named "rules_mylang"
+    # then this should just be named "rules_ecsact"
     # see https://docs.bazel.build/versions/main/skylark/deploying.html#workspace
-    name = "com_myorg_rules_mylang",
+    name = "rules_ecsact",
 )
 
-load(":internal_deps.bzl", "rules_mylang_internal_deps")
+load(":internal_deps.bzl", "rules_ecsact_internal_deps")
 
 # Fetch deps needed only locally for development
-rules_mylang_internal_deps()
+rules_ecsact_internal_deps()
 
-load("//mylang:repositories.bzl", "mylang_register_toolchains", "rules_mylang_dependencies")
+load("//ecsact:repositories.bzl", "ecsact_register_toolchains", "rules_ecsact_dependencies")
 
 # Fetch dependencies which users need as well
-rules_mylang_dependencies()
+rules_ecsact_dependencies()
 
-mylang_register_toolchains(
-    name = "mylang1_14",
-    mylang_version = "1.14.2",
+ecsact_register_toolchains(
+    name = "ecsact1_14",
+    ecsact_version = "1.14.2",
 )
 
 # For running our own unit tests
