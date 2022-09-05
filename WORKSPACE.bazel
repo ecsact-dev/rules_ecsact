@@ -17,10 +17,7 @@ load("//ecsact:repositories.bzl", "ecsact_register_toolchains", "rules_ecsact_de
 # Fetch dependencies which users need as well
 rules_ecsact_dependencies()
 
-ecsact_register_toolchains(
-    name = "ecsact1_14",
-    ecsact_version = "1.14.2",
-)
+ecsact_register_toolchains()
 
 # For running our own unit tests
 load("@bazel_skylib//:workspace.bzl", "bazel_skylib_workspace")
