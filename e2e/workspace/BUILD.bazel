@@ -1,0 +1,29 @@
+"""Provides a simple way to test your rules as an external workspace.
+Add a basic smoke-test target below.
+"""
+
+load("@bazel_skylib//rules:build_test.bzl", "build_test")
+load("@rules_ecsact//ecsact:defs.bzl", "ecsact_codegen")
+
+ecsact_codegen(
+    name = "all_default_codegen_plugins",
+    srcs = [
+        "example.ecsact",
+        "extras.ecsact",
+    ],
+    plugins = [
+        "@ecsact//codegen_plugins:cpp_header",
+        "@ecsact//codegen_plugins:cpp_meta_header",
+        "@ecsact//codegen_plugins:cpp_systems_header",
+        "@ecsact//codegen_plugins:csharp",
+        "@ecsact//codegen_plugins:systems_header",
+    ],
+)
+
+build_test(
+    name = "smoke_test",
+    targets = [
+        # targets you add above
+        ":all_default_codegen_plugins",
+    ],
+)
