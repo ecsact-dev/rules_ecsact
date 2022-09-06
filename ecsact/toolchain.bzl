@@ -1,7 +1,7 @@
 """This module implements the language-specific toolchain rule.
 """
 
-ecsactInfo = provider(
+EcsactInfo = provider(
     doc = "Information about how to invoke the tool executable.",
     fields = {
         "target_tool_path": "Path to the tool executable for the target platform.",
@@ -40,7 +40,7 @@ def _ecsact_toolchain_impl(ctx):
         files = depset(tool_files),
         runfiles = ctx.runfiles(files = tool_files),
     )
-    ecsactinfo = ecsactInfo(
+    ecsact_info = EcsactInfo(
         target_tool_path = target_tool_path,
         tool_files = tool_files,
     )
@@ -48,7 +48,7 @@ def _ecsact_toolchain_impl(ctx):
     # Export all the providers inside our ToolchainInfo
     # so the resolved_toolchain rule can grab and re-export them.
     toolchain_info = platform_common.ToolchainInfo(
-        ecsactinfo = ecsactinfo,
+        ecsact_info = ecsact_info,
         template_variables = template_variables,
         default = default,
     )

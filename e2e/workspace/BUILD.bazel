@@ -3,15 +3,17 @@ Add a basic smoke-test target below.
 """
 
 load("@bazel_skylib//rules:build_test.bzl", "build_test")
-# load("rules_ecsact//ecsact:defs.bzl", "...")
+load("@rules_ecsact//ecsact:defs.bzl", "ecsact_codegen")
 
-# Replace with a usage of your rule/macro
-filegroup(name = "empty")
+ecsact_codegen(
+    name = "all_default_codegen_plugins",
+    srcs = ["example.ecsact", "extras.ecsact"],
+)
 
 build_test(
     name = "smoke_test",
     targets = [
         # targets you add above
-        ":empty",
+        ":all_default_codegen_plugins",
     ],
 )
