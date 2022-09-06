@@ -39,10 +39,17 @@ def _ecsact_codegen(ctx):
 
 ecsact_codegen = rule(
     implementation = _ecsact_codegen,
+    doc = "Ecsact codegen rule. Executes `ecsact codegen` with specified plugins.",
     attrs = {
-        "srcs": attr.label_list(allow_files = True),
+        "srcs": attr.label_list(
+            allow_files = True,
+            mandatory = True,
+            doc = ".ecsact source files",
+        ),
         "plugins": attr.label_list(
             providers = [EcsactCodegenPluginInfo],
+            mandatory = True,
+            doc = "List of plugin to use for code generation. Default ones are available at `@ecsact//codegen_plugins:*`",
         ),
     },
     toolchains = ["//ecsact:toolchain_type"],

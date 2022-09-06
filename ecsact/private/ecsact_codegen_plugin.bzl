@@ -19,8 +19,9 @@ def _ecsact_codegen_plugin(ctx):
 
 ecsact_codegen_plugin = rule(
     implementation = _ecsact_codegen_plugin,
+    doc = "Bazel info necessary for ecsact codegen plugin to be used with `ecsact_codegen`. Default plugins are available at `@ecsact//codegen_plugins:*`.",
     attrs = {
-        "output_extension": attr.string(mandatory = True),
-        "plugin": attr.string(mandatory = True),
+        "output_extension": attr.string(mandatory = True, doc = "Plugin name. Also used as output file extension. This must match the extension specified by the plugin."),
+        "plugin": attr.string(mandatory = True, doc = "Path to plugin or name of builtin plugin."),
     },
 )
