@@ -11,6 +11,13 @@ ecsact_codegen(
         "example.ecsact",
         "extras.ecsact",
     ],
+    plugins = [
+        "@ecsact//codegen_plugins:cpp_header",
+        "@ecsact//codegen_plugins:cpp_meta_header",
+        "@ecsact//codegen_plugins:cpp_systems_header",
+        "@ecsact//codegen_plugins:csharp",
+        "@ecsact//codegen_plugins:systems_header",
+    ],
 )
 
 build_test(
