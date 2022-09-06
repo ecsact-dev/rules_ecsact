@@ -48,9 +48,14 @@ ecsact_toolchain(
 """
 
 def _download_repo(rctx, platform):
-    url = "https://github.com/ecsact-dev/ecsact_sdk/releases/download/{0}/ecsact_sdk_{0}_{1}.zip".format(
+    archive_extname = "tar.gz"
+    if platform.find("windows") != -1:
+        archive_extname = "zip"
+
+    url = "https://github.com/ecsact-dev/ecsact_sdk/releases/download/{0}/ecsact_sdk_{0}_{1}.{2}".format(
         rctx.attr.ecsact_version,
         platform,
+        archive_extname,
     )
     rctx.download_and_extract(
         url = url,
