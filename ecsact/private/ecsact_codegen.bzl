@@ -3,7 +3,7 @@
 
 def _ecsact_codegen(ctx):
     info = ctx.toolchains["//ecsact:toolchain_type"].ecsact_info
-    
+
     outputs = []
     outdir = ctx.actions.declare_directory(ctx.attr.name)
 

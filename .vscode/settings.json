@@ -1,0 +1,6 @@
+{
+  "[starlark]": {
+    "editor.defaultFormatter": "BazelBuild.vscode-bazel",
+    "editor.formatOnSave": true
+  }
+}

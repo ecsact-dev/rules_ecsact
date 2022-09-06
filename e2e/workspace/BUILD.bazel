@@ -7,7 +7,10 @@ load("@rules_ecsact//ecsact:defs.bzl", "ecsact_codegen")
 
 ecsact_codegen(
     name = "all_default_codegen_plugins",
-    srcs = ["example.ecsact", "extras.ecsact"],
+    srcs = [
+        "example.ecsact",
+        "extras.ecsact",
+    ],
 )
 
 build_test(

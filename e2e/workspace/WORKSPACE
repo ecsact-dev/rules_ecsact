@@ -14,7 +14,7 @@ local_repository(
 # you should fetch it *before* calling this.
 # Alternatively, you can skip calling this function, so long as you've
 # already fetched all the dependencies.
-load("@rules_ecsact//ecsact:repositories.bzl", "rules_ecsact_dependencies", "ecsact_register_toolchains")
+load("@rules_ecsact//ecsact:repositories.bzl", "ecsact_register_toolchains", "rules_ecsact_dependencies")
 
 rules_ecsact_dependencies()
 
