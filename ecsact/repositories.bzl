@@ -71,6 +71,8 @@ def _ecsact_repo_impl(rctx):
 def _host_platform(rctx):
     if rctx.os.name.find("windows") != -1:
         return "windows_x64"
+    if rctx.os.name == "linux" and rctx.os.arch == "amd64":
+        return "linux_x64"
 
     fail("Unsupported host platform %s %s" % (rctx.os.name, rctx.os.arch))
 

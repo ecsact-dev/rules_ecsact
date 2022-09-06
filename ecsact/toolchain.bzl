@@ -34,7 +34,7 @@ def _ecsact_toolchain_impl(ctx):
     # Make the $(tool_BIN) variable available in places like genrules.
     # See https://docs.bazel.build/versions/main/be/make-variables.html#custom_variables
     template_variables = platform_common.TemplateVariableInfo({
-        "ecsact_BIN": target_tool_path,
+        "ECSACT_BIN": target_tool_path,
     })
     default = DefaultInfo(
         files = depset(tool_files),

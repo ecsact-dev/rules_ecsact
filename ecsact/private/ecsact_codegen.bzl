@@ -23,6 +23,7 @@ def _ecsact_codegen(ctx):
         outputs = outputs,
         inputs = ctx.files.srcs,
         executable = info.target_tool_path,
+        tools = info.tool_files,
         arguments = [args],
     )
 
