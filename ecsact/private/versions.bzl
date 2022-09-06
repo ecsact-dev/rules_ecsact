@@ -9,5 +9,6 @@ LATEST_TOOL_VERSION = "0.3.3"
 TOOL_VERSIONS = {
     "0.3.3": {
         "windows_x64": "",
+        "linux_x64": "",
     },
 }
