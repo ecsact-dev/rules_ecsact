@@ -11,3 +11,15 @@ bzl_library(
     srcs = ["versions.bzl"],
     visibility = ["//ecsact:__subpackages__"],
 )
+
+bzl_library(
+    name = "ecsact_codegen",
+    srcs = ["ecsact_codegen.bzl"],
+    visibility = ["//ecsact:__subpackages__"],
+)
+
+bzl_library(
+    name = "ecsact_codegen_plugin",
+    srcs = ["ecsact_codegen_plugin.bzl"],
+    visibility = ["//ecsact:__subpackages__"],
+)

@@ -27,6 +27,9 @@ bzl_library(
     name = "defs",
     srcs = ["defs.bzl"],
     visibility = ["//visibility:public"],
+    deps = [
+        "//ecsact/private:ecsact_codegen",
+    ],
 )
 
 bzl_library(
