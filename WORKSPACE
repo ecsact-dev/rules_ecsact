@@ -1,11 +1,4 @@
-# Declare the local Bazel workspace.
-workspace(
-    # If your ruleset is "official"
-    # (i.e. is in the bazelbuild GitHub org)
-    # then this should just be named "rules_ecsact"
-    # see https://docs.bazel.build/versions/main/skylark/deploying.html#workspace
-    name = "rules_ecsact",
-)
+workspace(name = "rules_ecsact")
 
 load(":internal_deps.bzl", "rules_ecsact_internal_deps")
 
