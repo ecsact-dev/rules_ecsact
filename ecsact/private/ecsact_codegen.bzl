@@ -14,7 +14,6 @@ def _ecsact_codegen(ctx):
     args.add_all(ctx.files.srcs)
     args.add("--outdir", outdir.path)
 
-    outputs.append(outdir)
     for plugin in ctx.attr.plugins:
         plugin_info = plugin[EcsactCodegenPluginInfo]
         args.add("--plugin", plugin_info.plugin)
@@ -24,7 +23,7 @@ def _ecsact_codegen(ctx):
 
     ctx.actions.run(
         mnemonic = "EcsactCodegen",
-        outputs = outputs,
+        outputs = [outdir] + outputs,
         inputs = ctx.files.srcs,
         executable = info.target_tool_path,
         tools = info.tool_files,
