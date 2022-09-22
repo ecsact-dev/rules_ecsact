@@ -71,6 +71,14 @@ def _ecsact_repo_impl(rctx):
     _download_repo(rctx, rctx.attr.platform)
 
 _HOST_BUILD_CONTENT = """
+load("@rules_ecsact//ecsact:toolchain.bzl", "ecsact_toolchain")
+
+package(default_visibility = ["//visibility:public"])
+
+ecsact_toolchain(
+    name = "ecsact_toolchain",
+    target_tool_path = "{target_tool_path}",
+)
 """
 
 _CODEGEN_BUILD_CONTENT = """
@@ -109,8 +117,40 @@ ecsact_codegen_plugin(
 )
 """
 
+_FIND_ECSACT_SDK_PWSH = """
+$EcsactSdkInfo = Get-AppPackage EcsactSdk
+if($EcsactSdkInfo) {
+    echo $EcsactSdkInfo.InstallLocation
+}
+"""
+
 def _ecsact_host_repo_impl(rctx):
-    rctx.file("BUILD.bazel", _HOST_BUILD_CONTENT)
+    is_windows = rctx.os.name.startswith("windows")
+    exe_extension = ""
+    if is_windows:
+        exe_extension = ".exe"
+    ecsact_executable_name = "ecsact" + exe_extension
+
+    ecsact_path = rctx.which(ecsact_executable_name)
+
+    if ecsact_path == None and is_windows:
+        pwsh = rctx.which("pwsh.exe")
+        if pwsh == None:
+            fail("Cannot find pwsh.exe")
+        rctx.file("FindEcsactSdk.ps1", _FIND_ECSACT_SDK_PWSH)
+        exec_result = rctx.execute([pwsh, "FindEcsactSdk.ps1"])
+        ecsact_sdk_install_dir = exec_result.stdout
+        if ecsact_sdk_install_dir:
+            ecsact_sdk_install_dir = ecsact_sdk_install_dir.replace("\\", "/").strip()
+            ecsact_path = ecsact_sdk_install_dir + "/bin/ecsact.exe"
+
+    if ecsact_path == None:
+        rctx.file("BUILD.bazel", "")
+    else:
+        rctx.file("BUILD.bazel", _HOST_BUILD_CONTENT.format(
+            target_tool_path = ecsact_path,
+        ))
+
     rctx.file("codegen_plugins/BUILD.bazel", _CODEGEN_BUILD_CONTENT)
 
 ecsact_repository = repository_rule(

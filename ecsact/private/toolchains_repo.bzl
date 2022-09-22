@@ -68,6 +68,11 @@ load(":defs.bzl", "resolved_toolchain")
 
 resolved_toolchain(name = "resolved_toolchain", visibility = ["//visibility:public"])
 
+toolchain(
+    name = "system_toolchain",
+    toolchain = "@{user_repository_name}//:ecsact_toolchain",
+    toolchain_type = "@rules_ecsact//ecsact:toolchain_type",
+)
 """
 
 _PLATFORM_BUILD_CONTENT = """
@@ -84,7 +89,9 @@ toolchain(
 def _toolchains_repo_impl(rctx):
     rctx.file("defs.bzl", _STARLARK_CONTENT)
 
-    build_content = _BUILD_CONTENT
+    build_content = _BUILD_CONTENT.format(
+        user_repository_name = rctx.attr.user_repository_name,
+    )
 
     for [platform, meta] in PLATFORMS.items():
         build_content += _PLATFORM_BUILD_CONTENT.format(
