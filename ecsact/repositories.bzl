@@ -75,9 +75,12 @@ load("@rules_ecsact//ecsact:toolchain.bzl", "ecsact_toolchain")
 
 package(default_visibility = ["//visibility:public"])
 
+exports_files(glob(["share/**/*", "bin/**/*"]))
+
 ecsact_toolchain(
     name = "ecsact_toolchain",
     target_tool_path = "{target_tool_path}",
+    target_tool_path_runfiles = [{target_tool_path_runfiles}],
 )
 """
 
@@ -132,6 +135,7 @@ def _ecsact_host_repo_impl(rctx):
     ecsact_executable_name = "ecsact" + exe_extension
 
     ecsact_path = rctx.which(ecsact_executable_name)
+    target_tool_path_runfiles = []
 
     if ecsact_path == None and is_windows:
         pwsh = rctx.which("pwsh.exe")
@@ -143,12 +147,22 @@ def _ecsact_host_repo_impl(rctx):
         if ecsact_sdk_install_dir:
             ecsact_sdk_install_dir = ecsact_sdk_install_dir.replace("\\", "/").strip()
             ecsact_path = ecsact_sdk_install_dir + "/bin/ecsact.exe"
+            ecsact_config = json.decode(rctx.execute([ecsact_path, "config"]).stdout)
+            ecsact_plugin_dir = ecsact_config["plugin_dir"].replace("\\", "/")
+            rctx.symlink(ecsact_path, "bin/ecsact.exe")
+            for plugin in ecsact_config["builtin_plugins"]:
+                plugin_filename = "ecsact_" + plugin + "_codegen.dll"
+                plugin_abs_path = ecsact_plugin_dir + "/" + plugin_filename
+                plugin_local_path = "share/ecsact/" + plugin_filename
+                rctx.symlink(plugin_abs_path, plugin_local_path)
+                target_tool_path_runfiles.append("\"" + plugin_local_path + "\"")
 
     if ecsact_path == None:
         rctx.file("BUILD.bazel", "")
     else:
         rctx.file("BUILD.bazel", _HOST_BUILD_CONTENT.format(
             target_tool_path = ecsact_path,
+            target_tool_path_runfiles = ", ".join(target_tool_path_runfiles),
         ))
 
     rctx.file("codegen_plugins/BUILD.bazel", _CODEGEN_BUILD_CONTENT)

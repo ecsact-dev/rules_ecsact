@@ -5,6 +5,7 @@ EcsactInfo = provider(
     doc = "Information about how to invoke the tool executable.",
     fields = {
         "target_tool_path": "Path to the tool executable for the target platform.",
+        "target_tool_path_runfiles": "",
         "tool_files": """Files required in runfiles to make the tool executable available.
 
 May be empty if the target_tool_path points to a locally installed tool binary.""",
@@ -23,6 +24,8 @@ def _ecsact_toolchain_impl(ctx):
         fail("Can only set one of target_tool or target_tool_path but both were set.")
     if not ctx.attr.target_tool and not ctx.attr.target_tool_path:
         fail("Must set one of target_tool or target_tool_path.")
+    if ctx.attr.target_tool and ctx.attr.target_tool_path_runfiles:
+        fail("Cannot use target_tool_path_runfiles with target_tool.")
 
     tool_files = []
     target_tool_path = ctx.attr.target_tool_path
@@ -42,6 +45,7 @@ def _ecsact_toolchain_impl(ctx):
     )
     ecsact_info = EcsactInfo(
         target_tool_path = target_tool_path,
+        target_tool_path_runfiles = ctx.attr.target_tool_path_runfiles,
         tool_files = tool_files,
     )
 
@@ -69,6 +73,11 @@ ecsact_toolchain = rule(
         "target_tool_path": attr.string(
             doc = "Path to an existing executable for the target platform.",
             mandatory = False,
+        ),
+        "target_tool_path_runfiles": attr.label_list(
+            doc = "List of files needed at runtime for `target_tool_path`. Not valid with `target_tool`.",
+            mandatory = False,
+            allow_files = True,
         ),
     },
     doc = """Defines a ecsact compiler/runtime toolchain.

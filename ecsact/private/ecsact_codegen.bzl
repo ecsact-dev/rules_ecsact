@@ -7,6 +7,7 @@ def _ecsact_codegen(ctx):
     info = ctx.toolchains["//ecsact:toolchain_type"].ecsact_info
 
     outputs = []
+    tools = [] + info.tool_files
     outdir = ctx.actions.declare_directory(ctx.attr.name)
 
     args = ctx.actions.args()
@@ -21,12 +22,15 @@ def _ecsact_codegen(ctx):
             out_basename = ctx.attr.name + "/" + src.basename
             outputs.append(ctx.actions.declare_file(out_basename + "." + plugin_info.output_extension))
 
+    for p in info.target_tool_path_runfiles:
+        tools.extend(p.files.to_list())
+
     ctx.actions.run(
         mnemonic = "EcsactCodegen",
         outputs = [outdir] + outputs,
         inputs = ctx.files.srcs,
         executable = info.target_tool_path,
-        tools = info.tool_files,
+        tools = tools,
         arguments = [args],
     )
 
