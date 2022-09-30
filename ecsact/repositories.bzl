@@ -108,6 +108,12 @@ ecsact_codegen_plugin(
 )
 
 ecsact_codegen_plugin(
+    name = "cpp_systems_source",
+    output_extension = "systems.cc",
+    plugin = "cpp_systems_source",
+)
+
+ecsact_codegen_plugin(
     name = "csharp",
     output_extension = "cs",
     plugin = "csharp",
