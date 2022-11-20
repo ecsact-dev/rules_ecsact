@@ -133,6 +133,22 @@ if($EcsactSdkInfo) {
 }
 """
 
+def _find_pwsh(rctx):
+    pwsh = rctx.which("pwsh.exe")
+    if pwsh:
+        return pwsh
+
+    # rctx.which doesn't work for everything available on Windows. Using cmd's
+    # built-in 'where' command can find programs installed from the Microsoft
+    # store or MSIX packages.
+    cmd = rctx.which("cmd.exe")
+    if cmd:
+        where_result = rctx.execute([cmd, "/C", "where pwsh.exe"])
+        if where_result.stdout:
+            return where_result.stdout
+
+    return None
+
 def _ecsact_host_repo_impl(rctx):
     is_windows = rctx.os.name.startswith("windows")
     exe_extension = ""
@@ -144,7 +160,7 @@ def _ecsact_host_repo_impl(rctx):
     target_tool_path_runfiles = []
 
     if ecsact_path == None and is_windows:
-        pwsh = rctx.which("pwsh.exe")
+        pwsh = _find_pwsh(rctx)
         if pwsh == None:
             fail("Cannot find pwsh.exe")
         rctx.file("FindEcsactSdk.ps1", _FIND_ECSACT_SDK_PWSH)
