@@ -60,7 +60,7 @@ system Collision {
 	}
 }
 
-system {
+system AnonymousSystem01 {
 	readonly Position;
 	readonly Poisonous;
 	system PoisonousEffectTargeter {
@@ -70,7 +70,7 @@ system {
 	}
 }
 
-system {
+system AnonymousSystem02 {
 	readonly Poisonous;
 	system PoisonDamageTargeter {
 		readwrite Health;
@@ -84,7 +84,7 @@ system PoisonExpiry {
 	adds PoisonExpired;
 }
 
-system {
+system AnonymousSystem03 {
 	include PoisonExpired;
 	removes Poisoned;
 }
