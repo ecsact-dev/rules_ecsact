@@ -9,6 +9,8 @@ then run
 
 ```shell
 pre-commit install
+# or
+python -m pre_commit install
 ```
 
 Otherwise later tooling on CI may yell at you about formatting/linting violations.
