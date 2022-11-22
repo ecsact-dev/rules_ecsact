@@ -29,6 +29,12 @@ def rules_ecsact_dependencies():
             "https://mirror.bazel.build/github.com/bazelbuild/bazel-skylib/releases/download/1.2.1/bazel-skylib-1.2.1.tar.gz",
         ],
     )
+    http_archive(
+        name = "ecsact_runtime",
+        sha256 = "198a238f376ac047fdff348717338140e52f92e780ed5783bcc5374978610058",
+        strip_prefix = "ecsact_runtime-55ba04c54ba809e5a27a644bd9f238be5a807e44",
+        url = "https://github.com/ecsact-dev/ecsact_runtime/archive/55ba04c54ba809e5a27a644bd9f238be5a807e44.zip",
+    )
 
 ########
 # Remaining content of the file is only used to support toolchains.
@@ -85,7 +91,7 @@ ecsact_toolchain(
 """
 
 _CODEGEN_BUILD_CONTENT = """
-load("@rules_ecsact//ecsact:defs.bzl", "ecsact_codegen_plugin")
+load("@ecsact_runtime//:codegen_plugin.bzl", "ecsact_codegen_plugin")
 
 package(default_visibility = ["//visibility:public"])
 

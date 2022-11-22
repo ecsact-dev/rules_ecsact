@@ -29,7 +29,6 @@ bzl_library(
     visibility = ["//visibility:public"],
     deps = [
         "//ecsact/private:ecsact_codegen",
-        "//ecsact/private:ecsact_codegen_plugin",
     ],
 )
 
