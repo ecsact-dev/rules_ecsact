@@ -2,5 +2,8 @@
   "[starlark]": {
     "editor.defaultFormatter": "BazelBuild.vscode-bazel",
     "editor.formatOnSave": true
+  },
+  "files.associations": {
+    ".bazelrc.user": "bazelrc"
   }
 }

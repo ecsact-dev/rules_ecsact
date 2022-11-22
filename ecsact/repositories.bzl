@@ -85,7 +85,7 @@ ecsact_toolchain(
 """
 
 _CODEGEN_BUILD_CONTENT = """
-load("@rules_ecsact//ecsact:defs.bzl", "ecsact_codegen_plugin")
+load("@ecsact_runtime//:codegen_plugin.bzl", "ecsact_codegen_plugin")
 
 package(default_visibility = ["//visibility:public"])
 

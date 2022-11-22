@@ -1,7 +1,7 @@
 """
 """
 
-load("//ecsact/private:ecsact_codegen_plugin.bzl", "EcsactCodegenPluginInfo")
+load("@ecsact_runtime//:codegen_plugin.bzl", "EcsactCodegenPluginInfo")
 
 def _ecsact_codegen(ctx):
     info = ctx.toolchains["//ecsact:toolchain_type"].ecsact_info
@@ -15,9 +15,12 @@ def _ecsact_codegen(ctx):
     args.add_all(ctx.files.srcs)
     args.add("--outdir", outdir.path)
 
+    plugin_data = []
+
     for plugin in ctx.attr.plugins:
         plugin_info = plugin[EcsactCodegenPluginInfo]
         args.add("--plugin", plugin_info.plugin)
+        plugin_data.extend(plugin_info.data)
         for src in ctx.files.srcs:
             out_basename = ctx.attr.name + "/" + src.basename
             outputs.append(ctx.actions.declare_file(out_basename + "." + plugin_info.output_extension))
@@ -28,7 +31,7 @@ def _ecsact_codegen(ctx):
     ctx.actions.run(
         mnemonic = "EcsactCodegen",
         outputs = [outdir] + outputs,
-        inputs = ctx.files.srcs,
+        inputs = ctx.files.srcs + plugin_data,
         executable = info.target_tool_path,
         tools = tools,
         arguments = [args],
