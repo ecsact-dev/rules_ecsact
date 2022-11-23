@@ -55,6 +55,7 @@ ecsact_codegen = rule(
         "plugins": attr.label_list(
             providers = [EcsactCodegenPluginInfo],
             mandatory = True,
+            cfg = "exec",
             doc = "List of plugin to use for code generation. Default ones are available at `@ecsact//codegen_plugins:*`",
         ),
     },
