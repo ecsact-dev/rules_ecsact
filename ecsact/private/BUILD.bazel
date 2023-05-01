@@ -16,7 +16,7 @@ bzl_library(
     name = "ecsact_codegen",
     srcs = [
         "ecsact_codegen.bzl",
-        "@ecsact_runtime//:codegen_plugin.bzl",
+        "@ecsact_codegen//:codegen_plugin.bzl",
         "@rules_cc//cc:defs.bzl",
     ],
     visibility = ["//ecsact:__subpackages__"],
