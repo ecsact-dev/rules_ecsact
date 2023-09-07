@@ -63,7 +63,7 @@ def rules_ecsact_internal_deps():
 
     http_archive(
         name = "aspect_bazel_lib",
-        sha256 = "1cbbf62315d303c8083d5019a4657623d4f58e925fb51bdc8a41bad4a131f5c9",
-        strip_prefix = "bazel-lib-1.8.1",
-        url = "https://github.com/aspect-build/bazel-lib/archive/refs/tags/v1.8.1.tar.gz",
+        sha256 = "9a51150a25ba13e0301b47bbe731aef537330dcc222dc598ebdfe18d2efe2f33",
+        strip_prefix = "bazel-lib-1.34.5",
+        url = "https://github.com/aspect-build/bazel-lib/archive/refs/tags/v1.34.5.tar.gz",
     )
