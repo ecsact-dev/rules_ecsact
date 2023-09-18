@@ -34,7 +34,7 @@ def _ecsact_toolchain_impl(ctx):
         tool_files = ctx.attr.target_tool.files.to_list()
         target_tool_path = _to_manifest_path(ctx, tool_files[0])
 
-    # Make the $(tool_BIN) variable available in places like genrules.
+    # Make the $(ECSACT_BIN) variable available in places like genrules.
     # See https://docs.bazel.build/versions/main/be/make-variables.html#custom_variables
     template_variables = platform_common.TemplateVariableInfo({
         "ECSACT_BIN": target_tool_path,
@@ -49,8 +49,6 @@ def _ecsact_toolchain_impl(ctx):
         tool_files = tool_files,
     )
 
-    # Export all the providers inside our ToolchainInfo
-    # so the resolved_toolchain rule can grab and re-export them.
     toolchain_info = platform_common.ToolchainInfo(
         ecsact_info = ecsact_info,
         template_variables = template_variables,
