@@ -10,7 +10,7 @@ jobs:
         os:
           - ubuntu-latest
           - windows-latest
-    runs-on: ubuntu-latest
+    runs-on: ${{ matrix.os }}
     steps:
       - uses: ecsact-dev/github-action@f53092550c13ff3a93834b7ac7c664c73a634869
       - uses: actions/checkout@v4
