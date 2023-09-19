@@ -32,9 +32,9 @@ def rules_ecsact_dependencies():
 
     http_archive(
         name = "ecsact_codegen",
-        sha256 = "5a1a466dbddbe042c2e5910f3b65ca44a5ffcef5831fdd0c3b2e2863c13cfb31",
-        strip_prefix = "ecsact_codegen-0.0.2",
-        urls = ["https://github.com/ecsact-dev/ecsact_codegen/archive/refs/tags/0.0.2.tar.gz"],
+        sha256 = "c3f85d084ff24bece2bfd9dea4b3ce019c7859a25f023c79eeaea3fa9f366805",
+        strip_prefix = "ecsact_codegen-0.1.1",
+        urls = ["https://github.com/ecsact-dev/ecsact_codegen/archive/refs/tags/0.1.1.tar.gz"],
     )
 
 ########
