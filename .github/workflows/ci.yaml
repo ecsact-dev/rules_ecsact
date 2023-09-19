@@ -7,7 +7,7 @@ jobs:
   test-linux-bzlmod-ecsact-sdk:
     runs-on: ubuntu-latest
     steps:
-      - run: curl -sL https://github.com/ecsact-dev/ecsact_sdk/releases/download/0.6.2/ecsact_sdk_0.6.2_linux_x64.tar.gz | sudo tar -C /usr/bin -xz
+      - run: curl -sL https://github.com/ecsact-dev/ecsact_sdk/releases/download/0.6.2/ecsact_sdk_0.6.2_linux_x64.tar.gz | sudo tar -C /usr -xz
       - uses: actions/checkout@v4
       - name: bazel test //...
         working-directory: e2e/bzlmod-ecsact-sdk
