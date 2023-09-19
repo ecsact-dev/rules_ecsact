@@ -18,11 +18,6 @@ enum ExampleEnum {
 	EXAMPLE_TWO = 2;
 }
 
-component ExampleAll {
-	u8[12] example_static_array;
-	ExampleEnum example_enum;
-}
-
 component BoxCollision {
 	f32 width;
 	f32 height;

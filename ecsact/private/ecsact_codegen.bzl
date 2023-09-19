@@ -1,7 +1,7 @@
 """
 """
 
-load("@ecsact_codegen//:codegen_plugin.bzl", "EcsactCodegenPluginInfo")
+load(":ecsact_codegen_plugin.bzl", "EcsactCodegenPluginInfo")
 
 def _ecsact_codegen(ctx):
     info = ctx.toolchains["//ecsact:toolchain_type"].ecsact_info
