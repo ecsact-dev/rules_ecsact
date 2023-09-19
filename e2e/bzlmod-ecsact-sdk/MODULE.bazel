@@ -1,0 +1,15 @@
+module(name = "rules_ecsact_e2e_bzlmod_ecsact_sdk")
+
+bazel_dep(name = "bazel_skylib", version = "1.4.2")
+bazel_dep(name = "rules_ecsact")
+
+local_path_override(
+    module_name = "rules_ecsact",
+    path = "../..",
+)
+
+ecsact = use_extension("@rules_ecsact//ecsact:extensions.bzl", "ecsact")
+ecsact.sdk_toolchain(version = "0.6.2")
+use_repo(ecsact, "ecsact_toolchains", "ecsact_sdk")
+
+register_toolchains("@ecsact_toolchains//:all")
