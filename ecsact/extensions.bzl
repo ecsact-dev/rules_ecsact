@@ -29,7 +29,7 @@ package(default_visibility = ["//visibility:public"])
 
 ecsact_codegen_plugin(
     name = "cpp_header", 
-    output_extension = ".hh",
+    output_extension = "hh",
     plugin = "cpp_header",
 )
 """
@@ -77,7 +77,7 @@ def _windows_find_ecsact_from_app_installer(ctx):
     if cmd:
         where_result = ctx.execute([cmd, "/C", "where ecsact.exe"])
         if where_result.stdout:
-            return where_result.stdout.strip()
+            return ctx.path(where_result.stdout.strip())
 
     return None
 
@@ -118,7 +118,7 @@ def _ecsact_impl(mctx):
     )
     _ecsact_toolchains_repository(
         name = "ecsact_toolchains",
-        ecsact_exe = ecsact_exe,
+        ecsact_exe = str(ecsact_exe),
     )
 
 ecsact = module_extension(
