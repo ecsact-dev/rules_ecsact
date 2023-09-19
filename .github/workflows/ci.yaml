@@ -6,9 +6,10 @@ on:
 jobs:
   test-bzlmod-ecsact-sdk:
     strategy:
-      os:
-        - ubuntu-latest
-        - windows-latest
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
     runs-on: ubuntu-latest
     steps:
       - uses: ecsact-dev/github-action@f53092550c13ff3a93834b7ac7c664c73a634869
