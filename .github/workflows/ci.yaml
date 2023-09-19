@@ -4,11 +4,16 @@ on:
   push: {branches: '**'}
 
 jobs:
-  test-linux-bzlmod-ecsact-sdk:
-    runs-on: ubuntu-latest
+  test-bzlmod-ecsact-sdk:
+    strategy:
+      matrix:
+        os:
+          - ubuntu-latest
+          - windows-latest
+    runs-on: ${{ matrix.os }}
     steps:
-      - run: curl -sL https://github.com/ecsact-dev/ecsact_sdk/releases/download/0.6.2/ecsact_sdk_0.6.2_linux_x64.tar.gz | sudo tar -C /usr -xz
+      - uses: ecsact-dev/github-action@8919305619f476ac32e8310bf68dbd4b4b820cf3
       - uses: actions/checkout@v4
       - name: bazel test //...
         working-directory: e2e/bzlmod-ecsact-sdk
-        run: bazelisk --bazelrc=$GITHUB_WORKSPACE/.github/workflows/ci.bazelrc --bazelrc=.bazelrc test //...
+        run: bazelisk --bazelrc=../../.github/workflows/ci.bazelrc --bazelrc=.bazelrc test //...
