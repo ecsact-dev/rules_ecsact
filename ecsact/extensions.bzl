@@ -109,7 +109,8 @@ def _ecsact_impl(mctx):
 
     found_ecsact_version = ecsact_version_output.stdout.strip()
     if wanted_ecsact_version != None:
-        if found_ecsact_version != wanted_ecsact_version:
+        # workaround for https://github.com/ecsact-dev/ecsact_sdk/issues/293
+        if found_ecsact_version != wanted_ecsact_version and found_ecsact_version != "refs/tags/{}".format(wanted_ecsact_version):
             fail("Wanted Ecsact SDK {}, but {} is installed on your system".format(wanted_ecsact_version, found_ecsact_version))
 
     _ecsact_sdk_repository(
