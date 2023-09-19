@@ -12,7 +12,7 @@ jobs:
           - windows-latest
     runs-on: ${{ matrix.os }}
     steps:
-      - uses: ecsact-dev/github-action@f53092550c13ff3a93834b7ac7c664c73a634869
+      - uses: ecsact-dev/github-action@eec47f6e1a186ec7237af81a04ac579f0cc634b7
       - uses: actions/checkout@v4
       - name: bazel test //...
         working-directory: e2e/bzlmod-ecsact-sdk
