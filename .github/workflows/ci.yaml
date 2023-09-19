@@ -4,19 +4,17 @@ on:
   push: {branches: '**'}
 
 jobs:
-  test:
+  test-linux:
     strategy:
       matrix:
-        os:
-          - ubuntu-latest
-          - windows-latest
         folder:
             - '.'
             - 'e2e/bzlmod-ecsact-sdk'
 
-    runs-on: ${{ matrix.os }}
+    runs-on: ubuntu-latest
    
     steps:
+      - run: curl https://ecsact.dev/install.sh -sSfL | sh
       - uses: actions/checkout@v4
       - name: bazel test //...
         working-directory: ${{ matrix.folder }}
