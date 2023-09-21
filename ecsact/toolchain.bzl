@@ -12,13 +12,6 @@ May be empty if the target_tool_path points to a locally installed tool binary."
     },
 )
 
-# Avoid using non-normalized paths (workspace/../other_workspace/path)
-def _to_manifest_path(ctx, file):
-    if file.short_path.startswith("../"):
-        return "external/" + file.short_path[3:]
-    else:
-        return ctx.workspace_name + "/" + file.short_path
-
 def _ecsact_toolchain_impl(ctx):
     if ctx.attr.target_tool and ctx.attr.target_tool_path:
         fail("Can only set one of target_tool or target_tool_path but both were set.")
@@ -32,7 +25,7 @@ def _ecsact_toolchain_impl(ctx):
 
     if ctx.attr.target_tool:
         tool_files = ctx.attr.target_tool.files.to_list()
-        target_tool_path = _to_manifest_path(ctx, tool_files[0])
+        target_tool_path = tool_files[0].path
 
     # Make the $(ECSACT_BIN) variable available in places like genrules.
     # See https://docs.bazel.build/versions/main/be/make-variables.html#custom_variables
