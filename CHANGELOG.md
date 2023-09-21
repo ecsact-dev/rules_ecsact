@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.4.2 - 2023-09-21
+#### Bug Fixes
+- target tool path was incorrect (#28) - (f5d3e50) - Ezekiel Warren
+
+- - -
+
 ## 0.4.1 - 2023-09-21
 #### Features
 - allow plugin binary label (#27) - (2be7c29) - Ezekiel Warren
