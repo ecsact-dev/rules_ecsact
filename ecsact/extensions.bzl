@@ -30,7 +30,7 @@ package(default_visibility = ["//visibility:public"])
 ecsact_codegen_plugin(
     name = "cpp_header", 
     output_extension = "hh",
-    plugin = "cpp_header",
+    plugin_path = "cpp_header",
 )
 """
 
