@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.4.1 - 2023-09-21
+#### Features
+- allow plugin binary label (#27) - (2be7c29) - Ezekiel Warren
+#### Miscellaneous Chores
+- add windows test (#25) - (770124c) - Ezekiel Warren
+
+- - -
+
 ## 0.4.0 - 2023-09-19
 #### Features
 - bzlmodify rules_ecsact (#24) - (c994774) - Ezekiel Warren
