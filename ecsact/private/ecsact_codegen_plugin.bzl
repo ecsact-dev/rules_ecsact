@@ -11,15 +11,17 @@ def _ecsact_codegen_plugin(ctx):
     if ctx.attr.plugin and ctx.attr.plugin_path:
         fail("Cannot supply both 'plugin' and 'plugin_path' for ecsact_codegen_plugin")
 
+    data = []
     plugin_path = ctx.attr.plugin_path
     if ctx.file.plugin:
+        data.append(ctx.file.plugin)
         plugin_path = ctx.file.plugin.path
 
     return [
         EcsactCodegenPluginInfo(
             output_extension = ctx.attr.output_extension,
             plugin = plugin_path,
-            data = [],
+            data = data,
         ),
     ]
 
