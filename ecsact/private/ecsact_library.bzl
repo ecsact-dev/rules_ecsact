@@ -9,9 +9,9 @@ ecsact_library = rule(
         "srcs": attr.label_list(
             allow_files = [".ecsact"],
         ),
-        "deps": attr.label_list(
-            allow_rules = [EcsactLibraryInfo],
-        ),
+        # "deps": attr.label_list(
+        #     allow_rules = [EcsactLibraryInfo],
+        # ),
     },
     toolchains = ["//ecsact:toolchain_type"],
 )
