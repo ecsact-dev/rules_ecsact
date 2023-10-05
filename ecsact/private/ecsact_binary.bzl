@@ -2,7 +2,7 @@ load("@rules_cc//cc:find_cc_toolchain.bzl", "find_cc_toolchain", "use_cc_toolcha
 load("@bazel_tools//tools/build_defs/cc:action_names.bzl", "ACTION_NAMES")
 load("//ecsact/private:ecsact_build_recipe.bzl", "EcsactBuildRecipeInfo")
 
-def _ecsact_binary(ctx):
+def _ecsact_binary_impl(ctx):
     cc_toolchain = find_cc_toolchain(ctx)
 
     temp_dir = ctx.actions.declare_directory(ctx.attr.name)
@@ -27,8 +27,9 @@ def _ecsact_binary(ctx):
 
     ecsact_toolchain = ctx.toolchains["//ecsact:toolchain_type"].ecsact_info
 
-    # TODO(zaucy): derive runtime library extension based on ctx and cc_toolchain
-    runtime_output_file = ctx.actions.declare_file("{}.dll".format(ctx.attr.name))
+    preferred_output_extension = ctx.attr.lib_extension
+
+    runtime_output_file = ctx.actions.declare_file("{}{}".format(ctx.attr.name, preferred_output_extension))
     outputs = [runtime_output_file]
     tools = [] + ecsact_toolchain.tool_files
 
@@ -39,9 +40,6 @@ def _ecsact_binary(ctx):
     args.add("-o", runtime_output_file)
     args.add("--temp_dir", temp_dir.path)
     args.add("-f", "text")
-
-    # TODO(zaucy): detect shared library extension
-    preferred_output_extension = ".dll"
 
     compiler_config = {
         "compiler_type": "auto",
@@ -91,8 +89,8 @@ def _ecsact_binary(ctx):
         ),
     ]
 
-ecsact_binary = rule(
-    implementation = _ecsact_binary,
+_ecsact_binary = rule(
+    implementation = _ecsact_binary_impl,
     attrs = {
         "srcs": attr.label_list(
             allow_files = [".ecsact"],
@@ -107,7 +105,22 @@ ecsact_binary = rule(
                 "@rules_cc//cc:current_cc_toolchain",
             ),
         ),
+        "lib_extension": attr.string(
+            mandatory = True,
+        ),
     },
     toolchains = ["//ecsact:toolchain_type"] + use_cc_toolchain(),
     fragments = ["cpp"],
 )
+
+def ecsact_binary(**kwargs):
+    _ecsact_binary(
+        lib_extension = select({
+            "@platforms//os:windows": ".dll",
+            "@platforms//os:linux": ".so",
+            "@platforms//os:macos": ".dylib",
+            "@platforms//os:wasi": ".wasm",
+            "@platforms//os:none": ".wasm",  # for non-wasi
+        }),
+        **kwargs
+    )
