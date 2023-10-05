@@ -1,8 +1,13 @@
 load("@rules_cc//cc:find_cc_toolchain.bzl", "find_cc_toolchain", "use_cc_toolchain")
 load("@bazel_tools//tools/build_defs/cc:action_names.bzl", "ACTION_NAMES")
+load("//ecsact/private:ecsact_build_recipe.bzl", "EcsactBuildRecipeInfo")
 
 def _ecsact_binary(ctx):
     cc_toolchain = find_cc_toolchain(ctx)
+
+    temp_dir = ctx.actions.declare_directory(ctx.attr.name)
+
+    inputs = []
 
     feature_configuration = cc_common.configure_features(
         ctx = ctx,
@@ -32,8 +37,8 @@ def _ecsact_binary(ctx):
     args.add_all(ctx.files.srcs)
     args.add_all(ctx.files.recipes, before_each = "-r")
     args.add("-o", runtime_output_file)
-    args.add("--temp_dir", ctx.attr.name)
-    args.add("-f", "none")
+    args.add("--temp_dir", temp_dir.path)
+    args.add("-f", "text")
 
     # TODO(zaucy): detect shared library extension
     preferred_output_extension = ".dll"
@@ -55,20 +60,29 @@ def _ecsact_binary(ctx):
 
     args.add("--compiler_config", compiler_config_file)
 
-    for p in ecsact_toolchain.target_tool_path_runfiles:
-        tools.extend(p.files.to_list())
-
     if len(ctx.files.recipes) > 1:
         fail("Only 1 recipe is allowed at this time")
 
+    inputs.extend(ctx.files.srcs)
+    inputs.extend(ctx.files.recipes)
+    inputs.append(compiler_config_file)
+
+    for recipe in ctx.attr.recipes:
+        recipe_info = recipe[EcsactBuildRecipeInfo]
+        inputs.extend(recipe_info.data)
+
+    executable = ecsact_toolchain.target_tool if ecsact_toolchain.target_tool != None else ecsact_toolchain.target_tool_path
+
     ctx.actions.run(
         mnemonic = "EcsactBuild",
-        outputs = outputs,
-        inputs = ctx.files.srcs + ctx.files.recipes + [compiler_config_file],
-        executable = ecsact_toolchain.target_tool_path,
+        progress_message = "Building Ecsact Runtime %{output}",
+        outputs = outputs + [temp_dir],
+        inputs = inputs,
+        executable = executable,
         tools = tools,
         arguments = [args],
         env = env,
+        toolchain = Label("//ecsact:toolchain_type"),
     )
 
     return [
@@ -86,7 +100,7 @@ ecsact_binary = rule(
         "recipes": attr.label_list(
             allow_empty = False,
             mandatory = True,
-            allow_files = True,
+            providers = [EcsactBuildRecipeInfo],
         ),
         "_cc_toolchain": attr.label(
             default = Label(
