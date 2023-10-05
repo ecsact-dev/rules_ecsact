@@ -22,6 +22,13 @@ def _ecsact_build_recipe(ctx):
         })
         recipe_data.append(src)
 
+    for codegen_plugin in ctx.attr.codegen_plugins:
+        info = codegen_plugin[EcsactCodegenPluginInfo]
+        sources.append({
+            "codegen": [info.plugin],
+            "outdir": ctx.attr.codegen_plugins[codegen_plugin],
+        })
+
     recipe = {
         "name": ctx.attr.name,
         "sources": sources,
