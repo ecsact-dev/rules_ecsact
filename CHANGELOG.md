@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.4.3 - 2023-10-05
+#### Features
+- ecsact_binary and ecsact_library (#29) - (227d9d0) - Ezekiel Warren
+
+- - -
+
 ## 0.4.2 - 2023-09-21
 #### Bug Fixes
 - target tool path was incorrect (#28) - (f5d3e50) - Ezekiel Warren
