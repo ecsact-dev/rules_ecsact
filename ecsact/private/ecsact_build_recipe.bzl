@@ -14,13 +14,7 @@ def _ecsact_build_recipe(ctx):
     sources = []
     recipe_data = []
 
-    for dep in ctx.attr.deps:
-        cc_info = dep[CcInfo]
-        print(cc_info)
-        fail("todo check cc info")
-
     for src in ctx.files.srcs:
-        print(src)
         sources.append({
             "path": src.path,
             "outdir": "src",
@@ -52,9 +46,6 @@ ecsact_build_recipe = rule(
     attrs = {
         "srcs": attr.label_list(
             allow_files = True,
-        ),
-        "deps": attr.label_list(
-            providers = [CcInfo],
         ),
         "codegen_plugins": attr.label_keyed_string_dict(
             providers = [EcsactCodegenPluginInfo],
