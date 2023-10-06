@@ -40,6 +40,7 @@ def _ecsact_binary_impl(ctx):
     args.add("-o", runtime_output_file)
     args.add("--temp_dir", temp_dir.path)
     args.add("-f", "text")
+    args.add("--report_filter", "errors_and_warnings")
 
     # compile_flags = cc_common.get_memory_inefficient_command_line(
     #     feature_configuration = feature_configuration,
