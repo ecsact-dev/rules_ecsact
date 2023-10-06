@@ -5,7 +5,7 @@ load("//ecsact/private:ecsact_build_recipe.bzl", "EcsactBuildRecipeInfo")
 def _ecsact_binary_impl(ctx):
     cc_toolchain = find_cc_toolchain(ctx)
 
-    temp_dir = ctx.actions.declare_directory(ctx.attr.name)
+    temp_dir = ctx.actions.declare_directory("{}.ecsact_binary".format(ctx.attr.name))
 
     inputs = []
 
@@ -40,17 +40,21 @@ def _ecsact_binary_impl(ctx):
     args.add("-o", runtime_output_file)
     args.add("--temp_dir", temp_dir.path)
     args.add("-f", "text")
+    args.add("--report_filter", "errors_and_warnings")
 
     compiler_config = {
         "compiler_type": "auto",
         "compiler_path": cc_toolchain.compiler_executable,
         "compiler_version": "bazel c++ toolchain",
         "install_path": "",
+        "sysroot": cc_toolchain.sysroot,
         "std_inc_paths": cc_toolchain.built_in_include_directories,
         "std_lib_paths": [],
         "preferred_output_extension": preferred_output_extension,
         "allowed_output_extensions": [preferred_output_extension],
     }
+
+    tools.append(cc_toolchain.all_files)
 
     compiler_config_file = ctx.actions.declare_file("{}.compiler_config.json".format(ctx.attr.name))
 
