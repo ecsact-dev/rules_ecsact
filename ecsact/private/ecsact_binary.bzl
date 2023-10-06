@@ -42,14 +42,6 @@ def _ecsact_binary_impl(ctx):
     args.add("-f", "text")
     args.add("--report_filter", "errors_and_warnings")
 
-    # compile_flags = cc_common.get_memory_inefficient_command_line(
-    #     feature_configuration = feature_configuration,
-    #     action_name = ACTION_NAMES.cpp_compile,
-    #     variables = variables,
-    # )
-
-    # fail(cc_toolchain)
-
     compiler_config = {
         "compiler_type": "auto",
         "compiler_path": cc_toolchain.compiler_executable,
