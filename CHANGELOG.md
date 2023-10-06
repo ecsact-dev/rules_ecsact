@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.4.5 - 2023-10-06
+#### Bug Fixes
+- add missing C++ runfiles for ecsact_binary (#31) - (be6a6d0) - Ezekiel Warren
+
+- - -
+
 ## 0.4.4 - 2023-10-05
 #### Bug Fixes
 - remove hard coded .dll extension (#30) - (e085741) - Ezekiel Warren
