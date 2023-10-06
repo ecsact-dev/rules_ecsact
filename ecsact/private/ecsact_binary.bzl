@@ -14,14 +14,14 @@ def _ecsact_binary_impl(ctx):
         cc_toolchain = cc_toolchain,
     )
 
-    variables = cc_common.create_compile_variables(
+    variables = cc_common.create_link_variables(
         cc_toolchain = cc_toolchain,
         feature_configuration = feature_configuration,
     )
 
     env = cc_common.get_environment_variables(
         feature_configuration = feature_configuration,
-        action_name = ACTION_NAMES.cpp_compile,
+        action_name = ACTION_NAMES.cpp_link_dynamic_library,
         variables = variables,
     )
 
