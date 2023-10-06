@@ -5,7 +5,7 @@ load("//ecsact/private:ecsact_build_recipe.bzl", "EcsactBuildRecipeInfo")
 def _ecsact_binary_impl(ctx):
     cc_toolchain = find_cc_toolchain(ctx)
 
-    temp_dir = ctx.actions.declare_directory(ctx.attr.name)
+    temp_dir = ctx.actions.declare_directory("{}.ecsact_binary".format(ctx.attr.name))
 
     inputs = []
 
@@ -14,14 +14,14 @@ def _ecsact_binary_impl(ctx):
         cc_toolchain = cc_toolchain,
     )
 
-    variables = cc_common.create_link_variables(
+    variables = cc_common.create_compile_variables(
         cc_toolchain = cc_toolchain,
         feature_configuration = feature_configuration,
     )
 
     env = cc_common.get_environment_variables(
         feature_configuration = feature_configuration,
-        action_name = ACTION_NAMES.cpp_link_dynamic_library,
+        action_name = ACTION_NAMES.cpp_compile,
         variables = variables,
     )
 
@@ -41,16 +41,27 @@ def _ecsact_binary_impl(ctx):
     args.add("--temp_dir", temp_dir.path)
     args.add("-f", "text")
 
+    # compile_flags = cc_common.get_memory_inefficient_command_line(
+    #     feature_configuration = feature_configuration,
+    #     action_name = ACTION_NAMES.cpp_compile,
+    #     variables = variables,
+    # )
+
+    # fail(cc_toolchain)
+
     compiler_config = {
         "compiler_type": "auto",
         "compiler_path": cc_toolchain.compiler_executable,
         "compiler_version": "bazel c++ toolchain",
         "install_path": "",
+        "sysroot": cc_toolchain.sysroot,
         "std_inc_paths": cc_toolchain.built_in_include_directories,
         "std_lib_paths": [],
         "preferred_output_extension": preferred_output_extension,
         "allowed_output_extensions": [preferred_output_extension],
     }
+
+    tools.append(cc_toolchain.all_files)
 
     compiler_config_file = ctx.actions.declare_file("{}.compiler_config.json".format(ctx.attr.name))
 
