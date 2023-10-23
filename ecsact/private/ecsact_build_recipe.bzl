@@ -28,6 +28,7 @@ def _ecsact_build_recipe(ctx):
             "codegen": [info.plugin.path],
             "outdir": ctx.attr.codegen_plugins[codegen_plugin],
         })
+        recipe_data.append(info.plugin)
 
     recipe = {
         "name": ctx.attr.name,
