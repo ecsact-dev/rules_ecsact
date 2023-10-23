@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.4.6 - 2023-10-23
+#### Bug Fixes
+- error with codegen plugin path (#33) - (d717cb1) - Ezekiel Warren
+#### Miscellaneous Chores
+- **(deps)** update dependency bazel to v6.4.0 (#32) - (1836a0b) - renovate[bot]
+
+- - -
+
 ## 0.4.5 - 2023-10-06
 #### Bug Fixes
 - add missing C++ runfiles for ecsact_binary (#31) - (be6a6d0) - Ezekiel Warren
