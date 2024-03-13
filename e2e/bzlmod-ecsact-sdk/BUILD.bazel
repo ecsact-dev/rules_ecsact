@@ -3,6 +3,7 @@ load("@rules_ecsact//ecsact:defs.bzl", "ecsact_codegen")
 
 ecsact_codegen(
     name = "all_default_codegen_plugins",
+    output_directory = "codegen_outputs",
     srcs = [
         "example.ecsact",
         "extras.ecsact",

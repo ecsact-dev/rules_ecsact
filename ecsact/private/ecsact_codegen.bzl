@@ -8,12 +8,10 @@ def _ecsact_codegen(ctx):
 
     outputs = []
     tools = [] + info.tool_files
-    outdir = ctx.actions.declare_directory(ctx.attr.name)
 
     args = ctx.actions.args()
     args.add("codegen")
     args.add_all(ctx.files.srcs)
-    args.add("--outdir", outdir.path)
 
     plugin_data = []
 
@@ -22,12 +20,15 @@ def _ecsact_codegen(ctx):
         args.add("--plugin", plugin_info.plugin)
         plugin_data.extend(plugin_info.data)
         for src in ctx.files.srcs:
-            out_basename = ctx.attr.name + "/" + src.basename
-            outputs.append(ctx.actions.declare_file(out_basename + "." + plugin_info.output_extension))
+            out_basename = src.basename + "." + plugin_info.output_extension
+            out_file = ctx.attr.output_directory + "/" + out_basename
+            outputs.append(ctx.actions.declare_file(out_file))
+
+    args.add("--outdir", outputs[0].dirname)
 
     ctx.actions.run(
         mnemonic = "EcsactCodegen",
-        outputs = [outdir] + outputs,
+        outputs = outputs,
         inputs = ctx.files.srcs + plugin_data,
         executable = info.target_tool_path,
         tools = tools,
@@ -48,6 +49,10 @@ ecsact_codegen = rule(
             allow_files = True,
             mandatory = True,
             doc = ".ecsact source files",
+        ),
+        "output_directory": attr.string(
+            mandatory = True,
+            doc = "Output directory: equivalent to the ecsact codegen --outdir flag",
         ),
         "plugins": attr.label_list(
             providers = [EcsactCodegenPluginInfo],
