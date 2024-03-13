@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.4.8 - 2024-03-13
+#### Bug Fixes
+- dont declare folder same name as target (#41) - (d9aafaf) - Ezekiel Warren
+#### Miscellaneous Chores
+- bzlmod updates - (3787dd2) - Ezekiel Warren
+
+- - -
+
 ## 0.4.7 - 2023-10-24
 #### Bug Fixes
 - add missing plugin to recipe data (#34) - (9bede79) - Ezekiel Warren
