@@ -1,6 +1,6 @@
 module(name = "rules_ecsact_e2e_bzlmod_ecsact_sdk")
 
-bazel_dep(name = "bazel_skylib", version = "1.4.2")
+bazel_dep(name = "bazel_skylib", version = "1.5.0")
 bazel_dep(name = "rules_ecsact")
 
 local_path_override(
