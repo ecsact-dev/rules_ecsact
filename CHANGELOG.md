@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.4.9 - 2024-03-14
+#### Bug Fixes
+- treat plugin as string not path - (241d709) - Ezekiel Warren
+
+- - -
+
 ## 0.4.8 - 2024-03-13
 #### Bug Fixes
 - dont declare folder same name as target (#41) - (d9aafaf) - Ezekiel Warren
