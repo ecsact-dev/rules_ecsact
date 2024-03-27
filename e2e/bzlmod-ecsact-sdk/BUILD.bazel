@@ -1,26 +1,8 @@
 load("@bazel_skylib//rules:build_test.bzl", "build_test")
-load("@rules_ecsact//ecsact:defs.bzl", "ecsact_codegen")
-
-ecsact_codegen(
-    name = "all_default_codegen_plugins",
-    output_directory = "codegen_outputs",
-    srcs = [
-        "example.ecsact",
-        "extras.ecsact",
-    ],
-    plugins = [
-        "@ecsact_sdk//codegen_plugins:cpp_header",
-        # TODO(zaucy): Make other builtin plugins available
-        # "@ecsact_sdk//codegen_plugins:cpp_meta_header",
-        # "@ecsact_sdk//codegen_plugins:cpp_systems_header",
-        # "@ecsact_sdk//codegen_plugins:csharp",
-        # "@ecsact_sdk//codegen_plugins:systems_header",
-    ],
-)
 
 build_test(
     name = "build_test",
     targets = [
-        ":all_default_codegen_plugins",
+        "@ecsact_cli",
     ],
 )
