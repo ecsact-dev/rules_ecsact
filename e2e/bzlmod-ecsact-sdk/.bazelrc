@@ -3,4 +3,9 @@ common --registry=https://raw.githubusercontent.com/ecsact-dev/bazel_registry/ma
 common --registry=https://raw.githubusercontent.com/bazelboost/registry/main
 common --registry=https://bcr.bazel.build
 
+build --@boost.dll//:use_std_fs
+query --@boost.dll//:use_std_fs
+build --@boost.process//:use_std_fs
+query --@boost.process//:use_std_fs
+
 try-import %workspace%/../../.bazelrc.user
