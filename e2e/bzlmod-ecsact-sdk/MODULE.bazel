@@ -5,14 +5,23 @@ bazel_dep(name = "rules_ecsact")
 bazel_dep(name = "boost.process", version = "1.83.0.bzl.2")
 bazel_dep(name = "boost.dll", version = "1.83.0.bzl.2")
 bazel_dep(name = "ecsact_cli", version = "0.3.1")
+bazel_dep(name = "toolchains_llvm", version = "1.0.0", dev_dependency = True)
 
 local_path_override(
     module_name = "rules_ecsact",
     path = "../..",
 )
 
-ecsact = use_extension("@rules_ecsact//ecsact:extensions.bzl", "ecsact")
+llvm = use_extension("@toolchains_llvm//toolchain/extensions:llvm.bzl", "llvm", dev_dependency = True)
+llvm.toolchain(llvm_version = "17.0.6")
+use_repo(llvm, "llvm_toolchain")
+
+ecsact = use_extension("@rules_ecsact//ecsact:extensions.bzl", "ecsact", dev_dependency = True)
 ecsact.toolchain(use_ecsact_cli = True)
 use_repo(ecsact, "ecsact_toolchain")
 
-register_toolchains("@ecsact_toolchain//:all")
+register_toolchains(
+    "@llvm_toolchain//:all",
+    "@ecsact_toolchain//:all",
+    dev_dependency = True,
+)
