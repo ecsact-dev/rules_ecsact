@@ -9,6 +9,8 @@ EcsactBuildRecipeInfo = provider(
 )
 
 def _ecsact_build_recipe(ctx):
+    # type: (ctx) -> None
+
     recipe_yaml = ctx.actions.declare_file("{}.yml".format(ctx.attr.name))
 
     sources = []
@@ -17,7 +19,7 @@ def _ecsact_build_recipe(ctx):
     for src in ctx.files.srcs:
         sources.append({
             "path": src.path,
-            "outdir": "src",
+            "outdir": src.dirname,
             "relative_to_cwd": True,
         })
         recipe_data.append(src)

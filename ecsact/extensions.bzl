@@ -107,6 +107,9 @@ def _ecsact_impl(mctx):
 
     ecsact_exe = _get_escact_system_sdk(mctx, wanted_ecsact_version)
 
+    if ecsact_exe != None:
+        ecsact_exe = str(ecsact_exe)
+
     _ecsact_toolchain_repository(
         name = "ecsact_toolchain",
         ecsact_system_sdk_exe = ecsact_exe,
