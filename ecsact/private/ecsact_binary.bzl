@@ -1,5 +1,5 @@
-load("@rules_cc//cc:find_cc_toolchain.bzl", "find_cc_toolchain", "use_cc_toolchain")
 load("@bazel_tools//tools/build_defs/cc:action_names.bzl", "ACTION_NAMES")
+load("@rules_cc//cc:find_cc_toolchain.bzl", "find_cc_toolchain", "use_cc_toolchain")
 load("//ecsact/private:ecsact_build_recipe.bzl", "EcsactBuildRecipeInfo")
 
 def _ecsact_binary_impl(ctx):
