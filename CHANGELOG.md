@@ -2,6 +2,16 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.5.0 - 2024-04-04
+#### Features
+- configurable ecsact build report filter (#45) - (1f8fd04) - Ezekiel Warren
+- new toolchain bzlmod extension (#43) - (f4ec81e) - Ezekiel Warren
+#### Miscellaneous Chores
+- **(deps)** update dependency ecsact_cli to v0.3.2 (#44) - (7447686) - renovate[bot]
+- **(deps)** update dependency bazel to v7.1.1 (#42) - (1f4bf3f) - renovate[bot]
+
+- - -
+
 ## 0.4.9 - 2024-03-14
 #### Bug Fixes
 - treat plugin as string not path - (241d709) - Ezekiel Warren
