@@ -40,7 +40,9 @@ def _ecsact_binary_impl(ctx):
     args.add("-o", runtime_output_file)
     args.add("--temp_dir", temp_dir.path)
     args.add("-f", "text")
-    args.add("--report_filter", "errors_and_warnings")
+
+    report_filter = ctx.var.get("ECSACT_CLI_REPORT_FILTER", "errors_and_warnings")
+    args.add("--report_filter", report_filter)
 
     compiler_config = {
         "compiler_type": "auto",
