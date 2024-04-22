@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.5.1 - 2024-04-22
+#### Bug Fixes
+- **(bazel)** target exec for ecsact_cli tool (#47) - (e3fb7d2) - Ezekiel Warren
+#### Miscellaneous Chores
+- **(deps)** update dependency ecsact_cli to v0.3.4 (#46) - (da52101) - renovate[bot]
+
+- - -
+
 ## 0.5.0 - 2024-04-04
 #### Features
 - configurable ecsact build report filter (#45) - (1f8fd04) - Ezekiel Warren
