@@ -62,6 +62,7 @@ ecsact_toolchain = rule(
             doc = "A hermetically downloaded executable target for the target platform.",
             mandatory = False,
             allow_single_file = True,
+            cfg = "exec",
         ),
         "target_tool_path": attr.string(
             doc = "Path to an existing executable for the target platform.",

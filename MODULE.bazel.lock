@@ -1,6 +1,6 @@
 {
   "lockFileVersion": 6,
-  "moduleFileHash": "6b23bd016d9215faf9e4acb17a69f29d795c5651f3c80aadde0bb0f571c1e2b5",
+  "moduleFileHash": "e4c62b628b93180e84574aadf29d8a872611062322d9f7917a161b712c86828f",
   "flags": {
     "cmdRegistries": [
       "https://raw.githubusercontent.com/ecsact-dev/bazel_registry/main",
@@ -20,7 +20,7 @@
   "moduleDepGraph": {
     "<root>": {
       "name": "rules_ecsact",
-      "version": "0.4.9",
+      "version": "0.5.0",
       "key": "<root>",
       "repoName": "rules_ecsact",
       "executionPlatformsToRegister": [],
@@ -30,7 +30,7 @@
         "rules_cc": "rules_cc@0.0.9",
         "bazel_skylib": "bazel_skylib@1.5.0",
         "platforms": "platforms@0.0.9",
-        "ecsact_cli": "ecsact_cli@0.3.1",
+        "ecsact_cli": "ecsact_cli@0.3.2",
         "aspect_bazel_lib": "aspect_bazel_lib@1.32.1",
         "bazel_tools": "bazel_tools@_",
         "local_config_platform": "local_config_platform@_"
@@ -160,10 +160,10 @@
         }
       }
     },
-    "ecsact_cli@0.3.1": {
+    "ecsact_cli@0.3.2": {
       "name": "ecsact_cli",
-      "version": "0.3.1",
-      "key": "ecsact_cli@0.3.1",
+      "version": "0.3.2",
+      "key": "ecsact_cli@0.3.2",
       "repoName": "ecsact_cli",
       "executionPlatformsToRegister": [],
       "toolchainsToRegister": [],
@@ -194,9 +194,9 @@
         "ruleClassName": "http_archive",
         "attributes": {
           "urls": [
-            "https://github.com/ecsact-dev/ecsact_cli/releases/download/0.3.1/ecsact_cli-0.3.1.tar.gz"
+            "https://github.com/ecsact-dev/ecsact_cli/releases/download/0.3.2/ecsact_cli-0.3.2.tar.gz"
           ],
-          "integrity": "sha256-GV5Sc5ZaCguu9doui5EOFIWbyMuCj9f1n8TalLpXY0w=",
+          "integrity": "sha256-s63LdsugqaX0lHO8g65s6aczHyKLe4TswoTTNg0OBBc=",
           "strip_prefix": "",
           "remote_patches": {},
           "remote_patch_strip": 0
