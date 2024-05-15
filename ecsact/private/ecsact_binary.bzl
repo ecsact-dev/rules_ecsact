@@ -36,9 +36,13 @@ def _ecsact_binary_impl(ctx):
     preferred_output_extension = ctx.attr.shared_library_extension
 
     runtime_output_file = ctx.actions.declare_file("{}{}".format(ctx.attr.name, preferred_output_extension))
-    interface_output_file = ctx.actions.declare_file("{}{}".format(ctx.attr.name, ctx.attr.interface_library_extension))
-    outputs = [runtime_output_file, interface_output_file]
+    interface_output_file = None
+    if ctx.attr.interface_library_extension:
+        interface_output_file = ctx.actions.declare_file("{}{}".format(ctx.attr.name, ctx.attr.interface_library_extension))
     tools = [] + ecsact_toolchain.tool_files
+    outputs = [runtime_output_file]
+    if interface_output_file != None:
+        outputs.append(interface_output_file)
 
     args = ctx.actions.args()
     args.add("build")
@@ -165,6 +169,10 @@ def ecsact_binary(**kwargs):
         }),
         interface_library_extension = select({
             "@platforms//os:windows": ".lib",
+            "@platforms//os:linux": "",
+            "@platforms//os:macos": "",
+            "@platforms//os:wasi": "",
+            "@platforms//os:none": "",  # for non-wasi
         }),
         **kwargs
     )
