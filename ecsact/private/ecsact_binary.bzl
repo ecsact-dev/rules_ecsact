@@ -4,6 +4,12 @@ load("//ecsact/private:ecsact_build_recipe.bzl", "EcsactBuildRecipeInfo")
 
 def _ecsact_binary_impl(ctx):
     cc_toolchain = find_cc_toolchain(ctx)
+    feature_configuration = cc_common.configure_features(
+        ctx = ctx,
+        cc_toolchain = cc_toolchain,
+        requested_features = ctx.features,
+        unsupported_features = ctx.disabled_features,
+    )
 
     temp_dir = ctx.actions.declare_directory("{}.ecsact_binary".format(ctx.attr.name))
 
@@ -27,11 +33,16 @@ def _ecsact_binary_impl(ctx):
 
     ecsact_toolchain = ctx.toolchains["//ecsact:toolchain_type"].ecsact_info
 
-    preferred_output_extension = ctx.attr.lib_extension
+    preferred_output_extension = ctx.attr.shared_library_extension
 
     runtime_output_file = ctx.actions.declare_file("{}{}".format(ctx.attr.name, preferred_output_extension))
-    outputs = [runtime_output_file]
+    interface_output_file = None
+    if ctx.attr.interface_library_extension:
+        interface_output_file = ctx.actions.declare_file("{}{}".format(ctx.attr.name, ctx.attr.interface_library_extension))
     tools = [] + ecsact_toolchain.tool_files
+    outputs = [runtime_output_file]
+    if interface_output_file != None:
+        outputs.append(interface_output_file)
 
     args = ctx.actions.args()
     args.add("build")
@@ -89,7 +100,29 @@ def _ecsact_binary_impl(ctx):
         toolchain = Label("//ecsact:toolchain_type"),
     )
 
+    library_to_link = cc_common.create_library_to_link(
+        actions = ctx.actions,
+        feature_configuration = feature_configuration,
+        cc_toolchain = cc_toolchain,
+        static_library = None,
+        pic_static_library = None,
+        interface_library = interface_output_file,
+        dynamic_library = runtime_output_file,
+        alwayslink = False,
+    )
+
+    linker_input = cc_common.create_linker_input(
+        libraries = depset([library_to_link]),
+        user_link_flags = depset(ctx.attr.linkopts),
+        owner = ctx.label,
+    )
+
+    linking_context = cc_common.create_linking_context(
+        linker_inputs = depset([linker_input]),
+    )
+
     return [
+        CcInfo(linking_context = linking_context),
         DefaultInfo(
             files = depset(outputs),
         ),
@@ -111,8 +144,14 @@ _ecsact_binary = rule(
                 "@rules_cc//cc:current_cc_toolchain",
             ),
         ),
-        "lib_extension": attr.string(
+        "shared_library_extension": attr.string(
             mandatory = True,
+        ),
+        "interface_library_extension": attr.string(
+            mandatory = True,
+        ),
+        "linkopts": attr.string_list(
+            mandatory = False,
         ),
     },
     toolchains = ["//ecsact:toolchain_type"] + use_cc_toolchain(),
@@ -121,12 +160,19 @@ _ecsact_binary = rule(
 
 def ecsact_binary(**kwargs):
     _ecsact_binary(
-        lib_extension = select({
+        shared_library_extension = select({
             "@platforms//os:windows": ".dll",
             "@platforms//os:linux": ".so",
             "@platforms//os:macos": ".dylib",
             "@platforms//os:wasi": ".wasm",
             "@platforms//os:none": ".wasm",  # for non-wasi
+        }),
+        interface_library_extension = select({
+            "@platforms//os:windows": ".lib",
+            "@platforms//os:linux": "",
+            "@platforms//os:macos": "",
+            "@platforms//os:wasi": "",
+            "@platforms//os:none": "",  # for non-wasi
         }),
         **kwargs
     )
