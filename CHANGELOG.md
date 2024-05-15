@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.5.2 - 2024-05-15
+#### Features
+- ecsact_binary provides CcInfo (#53) - (5de3cb1) - Ezekiel Warren
+
+- - -
+
 ## 0.5.1 - 2024-04-22
 #### Bug Fixes
 - **(bazel)** target exec for ecsact_cli tool (#47) - (e3fb7d2) - Ezekiel Warren
