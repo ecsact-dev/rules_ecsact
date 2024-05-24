@@ -58,7 +58,7 @@ def _ecsact_binary_impl(ctx):
     if ctx.var["COMPILATION_MODE"] == "dbg":
         args.add("--debug")
         if ctx.attr.debug_symbols_extension:
-            outputs.append(ctx.actions.declare_file("{}{}").format(ctx.attr.name, ctx.attr.debug_symbols_extension))
+            outputs.append(ctx.actions.declare_file("{}{}".format(ctx.attr.name, ctx.attr.debug_symbols_extension)))
 
     compiler_config = {
         "compiler_type": "auto",
