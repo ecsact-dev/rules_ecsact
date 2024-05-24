@@ -55,6 +55,11 @@ def _ecsact_binary_impl(ctx):
     report_filter = ctx.var.get("ECSACT_CLI_REPORT_FILTER", "errors_and_warnings")
     args.add("--report_filter", report_filter)
 
+    if ctx.var["COMPILATION_MODE"] == "dbg":
+        args.add("--debug")
+        if ctx.attr.debug_symbols_extension:
+            outputs.append(ctx.actions.declare_file("{}{}").format(ctx.attr.name, ctx.attr.debug_symbols_extension))
+
     compiler_config = {
         "compiler_type": "auto",
         "compiler_path": cc_toolchain.compiler_executable,
@@ -150,6 +155,9 @@ _ecsact_binary = rule(
         "interface_library_extension": attr.string(
             mandatory = True,
         ),
+        "debug_symbols_extension": attr.string(
+            mandatory = True,
+        ),
         "linkopts": attr.string_list(
             mandatory = False,
         ),
@@ -169,6 +177,13 @@ def ecsact_binary(**kwargs):
         }),
         interface_library_extension = select({
             "@platforms//os:windows": ".lib",
+            "@platforms//os:linux": "",
+            "@platforms//os:macos": "",
+            "@platforms//os:wasi": "",
+            "@platforms//os:none": "",  # for non-wasi
+        }),
+        debug_symbols_extension = select({
+            "@platforms//os:windows": ".pdb",
             "@platforms//os:linux": "",
             "@platforms//os:macos": "",
             "@platforms//os:wasi": "",
