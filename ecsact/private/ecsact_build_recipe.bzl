@@ -1,3 +1,4 @@
+load("@rules_cc//cc:find_cc_toolchain.bzl", "use_cc_toolchain")
 load("//ecsact/private:ecsact_codegen_plugin.bzl", "EcsactCodegenPluginInfo")
 
 EcsactBuildRecipeInfo = provider(
@@ -100,4 +101,45 @@ ecsact_build_recipe = rule(
             mandatory = True,
         ),
     },
+)
+
+def _ecsact_build_recipe_bundle(ctx):
+    # type: (ctx) -> None
+
+    ecsact_toolchain = ctx.toolchains["//ecsact:toolchain_type"].ecsact_info
+    bundle_output_file = ctx.actions.declare_file("{}.ecsact-recipe-bundle".format(ctx.attr.name))
+
+    args = ctx.actions.args()
+    args.add("recipe-bundle")
+    args.add_all(ctx.files.recipes)
+    args.add("-o", bundle_output_file)
+
+    report_filter = ctx.var.get("ECSACT_CLI_REPORT_FILTER", "errors_and_warnings")
+    args.add("--report_filter", report_filter)
+
+    print("ARGS: ", args)
+
+    executable = ecsact_toolchain.target_tool if ecsact_toolchain.target_tool != None else ecsact_toolchain.target_tool_path
+
+    ctx.actions.run(
+        mnemonic = "EcsactRecipeBundle",
+        progress_message = "Bundling Ecsact Build Recipe %{output}",
+        outputs = [bundle_output_file],
+        inputs = ctx.files.recipes,
+        executable = executable,
+        arguments = [args],
+        toolchain = Label("//ecsact:toolchain_type"),
+    )
+    return DefaultInfo(
+        files = depset([bundle_output_file]),
+    )
+
+ecsact_build_recipe_bundle = rule(
+    implementation = _ecsact_build_recipe_bundle,
+    attrs = {
+        "recipes": attr.label_list(
+            providers = [EcsactBuildRecipeInfo],
+        ),
+    },
+    toolchains = ["//ecsact:toolchain_type"] + use_cc_toolchain(),
 )
