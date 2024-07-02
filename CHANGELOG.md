@@ -2,6 +2,21 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.5.3 - 2024-07-02
+#### Bug Fixes
+- add missing recipe data to bundle rule - (ab0b3c0) - Ezekiel Warren
+- remove debug print - (459fff3) - Ezekiel Warren
+#### Features
+- add rules for recipe bundles (#56) - (6afde02) - Austin Kelway
+- support ecsact_cli --debug flag (#54) - (6aacd8b) - Ezekiel Warren
+#### Miscellaneous Chores
+- **(deps)** update ecsact repositories (#55) - (a8dd8a3) - renovate[bot]
+- ignore bazel lock files - (fdea8b0) - Ezekiel Warren
+- add curl registry override - (0663960) - Ezekiel Warren
+- add curl registry override - (7929f24) - Ezekiel Warren
+
+- - -
+
 ## 0.5.2 - 2024-05-15
 #### Features
 - ecsact_binary provides CcInfo (#53) - (5de3cb1) - Ezekiel Warren
