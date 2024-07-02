@@ -117,8 +117,6 @@ def _ecsact_build_recipe_bundle(ctx):
     report_filter = ctx.var.get("ECSACT_CLI_REPORT_FILTER", "errors_and_warnings")
     args.add("--report_filter", report_filter)
 
-    print("ARGS: ", args)
-
     executable = ecsact_toolchain.target_tool if ecsact_toolchain.target_tool != None else ecsact_toolchain.target_tool_path
 
     ctx.actions.run(
