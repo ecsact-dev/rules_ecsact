@@ -1,4 +1,5 @@
 bazel-*
 user.bazelrc
+*.bazel.lock
 .idea/
 .ijwb/
