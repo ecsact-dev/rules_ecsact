@@ -119,11 +119,15 @@ def _ecsact_build_recipe_bundle(ctx):
 
     executable = ecsact_toolchain.target_tool if ecsact_toolchain.target_tool != None else ecsact_toolchain.target_tool_path
 
+    recipes_data = []
+    for recipe in ctx.attr.recipes:
+        recipes_data.extend(recipe[EcsactBuildRecipeInfo].data)
+
     ctx.actions.run(
         mnemonic = "EcsactRecipeBundle",
         progress_message = "Bundling Ecsact Build Recipe %{output}",
         outputs = [bundle_output_file],
-        inputs = ctx.files.recipes,
+        inputs = ctx.files.recipes + recipes_data,
         executable = executable,
         arguments = [args],
         toolchain = Label("//ecsact:toolchain_type"),
