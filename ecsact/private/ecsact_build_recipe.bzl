@@ -131,6 +131,8 @@ def _ecsact_build_recipe_bundle(ctx):
         executable = executable,
         arguments = [args],
         toolchain = Label("//ecsact:toolchain_type"),
+        # need curl in PATH due to https://github.com/ecsact-dev/ecsact_cli/issues/115
+        use_default_shell_env = True,
     )
     return DefaultInfo(
         files = depset([bundle_output_file]),
