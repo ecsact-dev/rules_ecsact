@@ -2,6 +2,12 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.5.5 - 2024-07-03
+#### Bug Fixes
+- allow host environment variables in recipe bundle rule (#57) - (c947eb9) - Ezekiel Warren
+
+- - -
+
 ## 0.5.3 - 2024-07-02
 #### Bug Fixes
 - add missing recipe data to bundle rule - (ab0b3c0) - Ezekiel Warren
