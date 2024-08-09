@@ -2,6 +2,17 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.5.6 - 2024-08-09
+#### Features
+- new ecsact_binary attr to allow unresolved imports (#62) - (ca7f1b1) - Ezekiel Warren
+- recipe bundles now provide recipe info (#61) - (c6e02b5) - Ezekiel Warren
+#### Miscellaneous Chores
+- **(deps)** update dependency ecsact_cli to v0.3.15 (#60) - (ae1f5f0) - renovate[bot]
+- **(deps)** update dependency ecsact_cli to v0.3.14 (#58) - (9f91544) - renovate[bot]
+- update readme logo - (9b072b9) - Ezekiel Warren
+
+- - -
+
 ## 0.5.5 - 2024-07-03
 #### Bug Fixes
 - allow host environment variables in recipe bundle rule (#57) - (c947eb9) - Ezekiel Warren
