@@ -80,8 +80,8 @@ def _ecsact_binary_impl(ctx):
 
     args.add("--compiler_config", compiler_config_file)
 
-    if len(ctx.files.recipes) > 1:
-        fail("Only 1 recipe is allowed at this time")
+    if ctx.attr.allow_unresolved_imports:
+        args.add("--allow-unresolved-imports")
 
     inputs.extend(ctx.files.srcs)
     inputs.extend(ctx.files.recipes)
@@ -160,6 +160,10 @@ _ecsact_binary = rule(
         ),
         "linkopts": attr.string_list(
             mandatory = False,
+        ),
+        "allow_unresolved_imports": attr.bool(
+            mandatory = False,
+            default = False,
         ),
     },
     toolchains = ["//ecsact:toolchain_type"] + use_cc_toolchain(),
