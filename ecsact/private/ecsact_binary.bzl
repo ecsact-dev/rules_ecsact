@@ -161,7 +161,7 @@ _ecsact_binary = rule(
         "linkopts": attr.string_list(
             mandatory = False,
         ),
-        "allow_unresolved_imports": attr.string(
+        "allow_unresolved_imports": attr.bool(
             mandatory = False,
             default = False,
         ),
