@@ -27,7 +27,6 @@ def _ecsact_codegen(ctx):
         else:
             for output in plugin_info.outputs:
                 out_file = ctx.attr.output_directory + "/" + output
-                print("FILE: " + out_file)
                 outputs.append(ctx.actions.declare_file(out_file))
 
     args.add("--outdir", outputs[0].dirname)
