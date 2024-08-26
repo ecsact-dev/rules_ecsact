@@ -19,10 +19,15 @@ def _ecsact_codegen(ctx):
         plugin_info = plugin[EcsactCodegenPluginInfo]
         args.add("--plugin", plugin_info.plugin)
         plugin_data.extend(plugin_info.data)
-        for src in ctx.files.srcs:
-            out_basename = src.basename + "." + plugin_info.output_extension
-            out_file = ctx.attr.output_directory + "/" + out_basename
-            outputs.append(ctx.actions.declare_file(out_file))
+        if len(plugin_info.outputs) == 0:
+            for src in ctx.files.srcs:
+                out_basename = src.basename + "." + plugin_info.output_extension
+                out_file = ctx.attr.output_directory + "/" + out_basename
+                outputs.append(ctx.actions.declare_file(out_file))
+        else:
+            for output in plugin_info.outputs:
+                out_file = ctx.attr.output_directory + "/" + output
+                outputs.append(ctx.actions.declare_file(out_file))
 
     args.add("--outdir", outputs[0].dirname)
 
