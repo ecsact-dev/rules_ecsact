@@ -1,6 +1,6 @@
 module(
     name = "rules_ecsact",
-    version = "0.5.6",
+    version = "0.5.7",
     compatibility_level = 5,
 )
 

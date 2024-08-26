@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.5.7 - 2024-08-26
+#### Features
+- Allow explicit file outputs vs extensions in codegen rule (#64) - (1cba698) - Austin Kelway
+#### Miscellaneous Chores
+- **(deps)** update dependency ecsact_cli to v0.3.16 (#63) - (1303f78) - renovate[bot]
+
+- - -
+
 ## 0.5.6 - 2024-08-09
 #### Features
 - new ecsact_binary attr to allow unresolved imports (#62) - (ca7f1b1) - Ezekiel Warren
