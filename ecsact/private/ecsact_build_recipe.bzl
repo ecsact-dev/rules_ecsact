@@ -37,6 +37,7 @@ def _ecsact_build_recipe(ctx):
     recipe_yaml = ctx.actions.declare_file("{}.yml".format(ctx.attr.name))
 
     sources = []
+    libs = []
     recipe_data = []
 
     for src in ctx.files.srcs:
@@ -65,7 +66,11 @@ def _ecsact_build_recipe(ctx):
         recipe_data.append(info.plugin)
 
     for cc_dep in ctx.attr.cc_deps:
+        print(cc_dep)
+        fail("test")
         cc_info = cc_dep[CcInfo]
+        lib_sources = []
+        lib_system_libs = []
 
         for hdr in cc_info.compilation_context.headers.to_list():
             hdr_prefix = ""
@@ -83,16 +88,23 @@ def _ecsact_build_recipe(ctx):
                 hdr_prefix_base = hdr.path.removeprefix(hdr_prefix)
                 hdr_prefix_base_idx = hdr_prefix_base.rindex("/")
                 hdr_prefix_base = hdr_prefix_base[:hdr_prefix_base_idx]
-                sources.append({
+                lib_sources.append({
                     "path": hdr.path,
                     "outdir": "include" + hdr_prefix_base,
                     "relative_to_cwd": True,
                 })
                 recipe_data.append(hdr)
 
+        libs.append({
+            "name": str(cc_dep.label),
+            "sources": lib_sources,
+            "system_libs": lib_system_libs,
+        })
+
     recipe = {
         "name": ctx.attr.name,
         "sources": sources,
+        "libs": libs,
         "imports": ctx.attr.imports,
         "exports": ctx.attr.exports,
     }
