@@ -64,6 +64,32 @@ def _ecsact_build_recipe(ctx):
         })
         recipe_data.append(info.plugin)
 
+    for cc_dep in ctx.attr.cc_deps:
+        cc_info = cc_dep[CcInfo]
+
+        for hdr in cc_info.compilation_context.headers.to_list():
+            hdr_prefix = ""
+
+            for quote_inc in cc_info.compilation_context.quote_includes.to_list():
+                if hdr.path.startswith(quote_inc):
+                    hdr_prefix = quote_inc
+                    break
+            for sys_inc in cc_info.compilation_context.system_includes.to_list():
+                if hdr.path.startswith(sys_inc):
+                    hdr_prefix = sys_inc
+                    break
+
+            if hdr_prefix:
+                hdr_prefix_base = hdr.path.removeprefix(hdr_prefix)
+                hdr_prefix_base_idx = hdr_prefix_base.rindex("/")
+                hdr_prefix_base = hdr_prefix_base[:hdr_prefix_base_idx]
+                sources.append({
+                    "path": hdr.path,
+                    "outdir": "include" + hdr_prefix_base,
+                    "relative_to_cwd": True,
+                })
+                recipe_data.append(hdr)
+
     recipe = {
         "name": ctx.attr.name,
         "sources": sources,
@@ -88,6 +114,9 @@ ecsact_build_recipe = rule(
     attrs = {
         "srcs": attr.label_list(
             allow_files = True,
+        ),
+        "cc_deps": attr.label_list(
+            providers = [CcInfo],
         ),
         "fetch_srcs": attr.string_list_dict(
             allow_empty = True,
