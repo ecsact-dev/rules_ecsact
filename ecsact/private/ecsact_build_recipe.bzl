@@ -66,7 +66,8 @@ def _ecsact_build_recipe(ctx):
 
     for cc_dep in ctx.attr.cc_deps:
         cc_info = cc_dep[CcInfo]
-        for hdr in cc_info.compilation_context.direct_headers:
+
+        for hdr in cc_info.compilation_context.headers.to_list():
             hdr_prefix = ""
 
             for quote_inc in cc_info.compilation_context.quote_includes.to_list():
@@ -77,10 +78,6 @@ def _ecsact_build_recipe(ctx):
                 if hdr.path.startswith(sys_inc):
                     hdr_prefix = sys_inc
                     break
-
-            if hdr.path.endswith("channel_send_functions.hpp"):
-                print(hdr.path)
-                print(hdr_prefix)
 
             if hdr_prefix:
                 hdr_prefix_base = hdr.path.removeprefix(hdr_prefix)
