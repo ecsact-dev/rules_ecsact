@@ -64,31 +64,44 @@ def _ecsact_build_recipe(ctx):
         })
         recipe_data.append(info.plugin)
 
+    cc_dep_compilation_contexts = []
     for cc_dep in ctx.attr.cc_deps:
         cc_info = cc_dep[CcInfo]
+        cc_dep_compilation_contexts.append(cc_info.compilation_context)
 
-        for hdr in cc_info.compilation_context.headers.to_list():
+    if len(cc_dep_compilation_contexts) > 0:
+        cc_dep_compilation_context = cc_common.merge_compilation_contexts(compilation_contexts = cc_dep_compilation_contexts)
+
+        for hdr in cc_dep_compilation_context.headers.to_list():
             hdr_prefix = ""
 
-            for quote_inc in cc_info.compilation_context.quote_includes.to_list():
+            for quote_inc in cc_dep_compilation_context.quote_includes.to_list():
                 if hdr.path.startswith(quote_inc):
                     hdr_prefix = quote_inc
                     break
-            for sys_inc in cc_info.compilation_context.system_includes.to_list():
+            for sys_inc in cc_dep_compilation_context.system_includes.to_list():
                 if hdr.path.startswith(sys_inc):
                     hdr_prefix = sys_inc
                     break
+            for inc in cc_dep_compilation_context.includes.to_list():
+                if hdr.path.startswith(inc):
+                    hdr_prefix = inc
+                    break
 
+            hdr_prefix_base = ""
             if hdr_prefix:
                 hdr_prefix_base = hdr.path.removeprefix(hdr_prefix)
                 hdr_prefix_base_idx = hdr_prefix_base.rindex("/")
                 hdr_prefix_base = hdr_prefix_base[:hdr_prefix_base_idx]
-                sources.append({
-                    "path": hdr.path,
-                    "outdir": "include" + hdr_prefix_base,
-                    "relative_to_cwd": True,
-                })
-                recipe_data.append(hdr)
+            else:
+                hdr_prefix_base_idx = hdr.path.rindex("/")
+                hdr_prefix_base = "/" + hdr.path[:hdr_prefix_base_idx]
+            sources.append({
+                "path": hdr.path,
+                "outdir": "include" + hdr_prefix_base,
+                "relative_to_cwd": True,
+            })
+            recipe_data.append(hdr)
 
     recipe = {
         "name": ctx.attr.name,
