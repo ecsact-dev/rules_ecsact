@@ -37,6 +37,7 @@ def _ecsact_build_recipe(ctx):
     recipe_yaml = ctx.actions.declare_file("{}.yml".format(ctx.attr.name))
 
     sources = []
+    system_libs = []
     recipe_data = []
 
     for src in ctx.files.srcs:
@@ -107,6 +108,7 @@ def _ecsact_build_recipe(ctx):
         "name": ctx.attr.name,
         "sources": sources,
         "imports": ctx.attr.imports,
+        "system_libs": system_libs,
         "exports": ctx.attr.exports,
     }
 
@@ -132,6 +134,9 @@ ecsact_build_recipe = rule(
             providers = [CcInfo],
         ),
         "fetch_srcs": attr.string_list_dict(
+            allow_empty = True,
+        ),
+        "system_libs": attr.string_list(
             allow_empty = True,
         ),
         "codegen_plugins": attr.label_keyed_string_dict(
