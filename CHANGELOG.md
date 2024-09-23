@@ -2,6 +2,14 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.5.8 - 2024-09-23
+#### Features
+- add system libs support to build recipe rule (#68) - (cdbca4e) - Ezekiel Warren
+- better cc dep support on Windows (#67) - (b11471a) - Ezekiel Warren
+- allow adding cc deps to recipe rule (#65) - (4f9b35e) - Ezekiel Warren
+
+- - -
+
 ## 0.5.7 - 2024-08-26
 #### Features
 - Allow explicit file outputs vs extensions in codegen rule (#64) - (1cba698) - Austin Kelway
