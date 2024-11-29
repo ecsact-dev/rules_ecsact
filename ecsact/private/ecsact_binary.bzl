@@ -44,6 +44,13 @@ def _ecsact_binary_impl(ctx):
     if interface_output_file != None:
         outputs.append(interface_output_file)
 
+    if ctx.attr.tracy:
+        tracy_dll_file = ctx.actions.declare_file("{}{}".format("profiler", ".dll"))
+        tracy_lib_file = ctx.actions.declare_file("{}{}".format("profiler", ".lib"))
+
+        outputs.append(tracy_dll_file)
+        outputs.append(tracy_lib_file)
+
     args = ctx.actions.args()
     args.add("build")
     args.add_all(ctx.files.srcs)
@@ -80,6 +87,9 @@ def _ecsact_binary_impl(ctx):
 
     args.add("--compiler_config", compiler_config_file)
 
+    if ctx.attr.tracy:
+        args.add("--tracy")
+
     if ctx.attr.allow_unresolved_imports:
         args.add("--allow-unresolved-imports")
 
@@ -105,7 +115,9 @@ def _ecsact_binary_impl(ctx):
         toolchain = Label("//ecsact:toolchain_type"),
     )
 
-    library_to_link = cc_common.create_library_to_link(
+    link_libraries = []
+
+    runtime_link_library = cc_common.create_library_to_link(
         actions = ctx.actions,
         feature_configuration = feature_configuration,
         cc_toolchain = cc_toolchain,
@@ -116,8 +128,23 @@ def _ecsact_binary_impl(ctx):
         alwayslink = False,
     )
 
+    link_libraries.append(runtime_link_library)
+
+    if ctx.attr.tracy:
+        tracy_link_library = cc_common.create_library_to_link(
+            actions = ctx.actions,
+            feature_configuration = feature_configuration,
+            cc_toolchain = cc_toolchain,
+            static_library = None,
+            pic_static_library = None,
+            interface_library = tracy_lib_file,
+            dynamic_library = tracy_dll_file,
+            alwayslink = False,
+        )
+        link_libraries.append(tracy_link_library)
+
     linker_input = cc_common.create_linker_input(
-        libraries = depset([library_to_link]),
+        libraries = depset(link_libraries),
         user_link_flags = depset(ctx.attr.linkopts),
         owner = ctx.label,
     )
@@ -162,6 +189,10 @@ _ecsact_binary = rule(
             mandatory = False,
         ),
         "allow_unresolved_imports": attr.bool(
+            mandatory = False,
+            default = False,
+        ),
+        "tracy": attr.bool(
             mandatory = False,
             default = False,
         ),
