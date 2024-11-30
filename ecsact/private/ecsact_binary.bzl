@@ -45,8 +45,8 @@ def _ecsact_binary_impl(ctx):
         outputs.append(interface_output_file)
 
     if ctx.attr.tracy:
-        tracy_dll_file = ctx.actions.declare_file("{}{}".format("profiler", ".dll"))
-        tracy_lib_file = ctx.actions.declare_file("{}{}".format("profiler", ".lib"))
+        tracy_dll_file = ctx.actions.declare_file("{}{}".format("profiler", preferred_output_extension))
+        tracy_lib_file = ctx.actions.declare_file("{}{}".format("profiler", ctx.attr.interface_library_extension))
 
         outputs.append(tracy_dll_file)
         outputs.append(tracy_lib_file)
