@@ -2,6 +2,17 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.5.9 - 2024-11-30
+#### Bug Fixes
+- use preferred and interface lib for extensions - (b9cc274) - Kelwan
+#### Features
+- Tracy (#71) - (eebb5fb) - Austin Kelway
+#### Miscellaneous Chores
+- **(deps)** update dependency ecsact_cli to v0.3.19 (#70) - (902da1c) - renovate[bot]
+- **(deps)** update dependency ecsact_cli to v0.3.17 (#69) - (53493d5) - renovate[bot]
+
+- - -
+
 ## 0.5.8 - 2024-09-23
 #### Features
 - add system libs support to build recipe rule (#68) - (cdbca4e) - Ezekiel Warren
