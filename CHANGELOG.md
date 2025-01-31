@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.5.10 - 2025-01-31
+#### Bug Fixes
+- system_libs is now properly being created in recipes - (f935f75) - Ezekiel Warren
+#### Miscellaneous Chores
+- **(deps)** update dependency ecsact_cli to v0.3.22 (#73) - (5990b9c) - renovate[bot]
+- **(deps)** update dependency ecsact_cli to v0.3.21 (#72) - (b0a4e4d) - renovate[bot]
+
+- - -
+
 ## 0.5.9 - 2024-11-30
 #### Bug Fixes
 - use preferred and interface lib for extensions - (b9cc274) - Kelwan
