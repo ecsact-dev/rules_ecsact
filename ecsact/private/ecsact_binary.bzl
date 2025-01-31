@@ -109,6 +109,8 @@ def _ecsact_binary_impl(ctx):
         outputs = outputs + [temp_dir],
         inputs = inputs,
         executable = executable,
+        # 'ecsact build' reads some environment variables for configuration
+        use_default_shell_env = True,
         tools = tools,
         arguments = [args],
         env = env,
