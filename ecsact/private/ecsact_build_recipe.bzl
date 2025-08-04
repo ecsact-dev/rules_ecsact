@@ -1,3 +1,4 @@
+load("@bazel_skylib//lib:paths.bzl", "paths")
 load("@rules_cc//cc:find_cc_toolchain.bzl", "use_cc_toolchain")
 load("//ecsact/private:ecsact_codegen_plugin.bzl", "EcsactCodegenPluginInfo")
 
@@ -31,6 +32,17 @@ def _source_outdir(src):
             return "include/" + _strip_external(src.dirname)
     return _strip_external(src.dirname)
 
+def _dedup_sources(source_paths):
+    # TODO(zaucy): this is very inefficient, we should properly use depsets
+    seen = {}
+    deduped = []
+    for src in source_paths:
+        key = (src["outdir"], paths.basename(src["path"]))
+        if not key in seen:
+            seen[key] = True
+            deduped.append(src)
+    return deduped
+
 def _ecsact_build_recipe(ctx):
     # type: (ctx) -> None
 
@@ -39,8 +51,10 @@ def _ecsact_build_recipe(ctx):
     sources = []
     recipe_data = []
 
+    source_paths = []
+
     for src in ctx.files.srcs:
-        sources.append({
+        source_paths.append({
             "path": src.path,
             "outdir": _source_outdir(src),
             "relative_to_cwd": True,
@@ -96,12 +110,14 @@ def _ecsact_build_recipe(ctx):
             else:
                 hdr_prefix_base_idx = hdr.path.rindex("/")
                 hdr_prefix_base = "/" + hdr.path[:hdr_prefix_base_idx]
-            sources.append({
+            source_paths.append({
                 "path": hdr.path,
                 "outdir": "include" + hdr_prefix_base,
                 "relative_to_cwd": True,
             })
             recipe_data.append(hdr)
+
+    sources.extend(_dedup_sources(source_paths))
 
     recipe = {
         "name": ctx.attr.name,
@@ -141,8 +157,7 @@ ecsact_build_recipe = rule(
         "codegen_plugins": attr.label_keyed_string_dict(
             providers = [EcsactCodegenPluginInfo],
         ),
-        "imports": attr.string_list(
-        ),
+        "imports": attr.string_list(),
         "exports": attr.string_list(
             mandatory = True,
         ),
