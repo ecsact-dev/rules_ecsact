@@ -49,17 +49,28 @@ def _is_cc_source(p):
     return False
 
 def _cpp_source_collector_aspect_impl(target, ctx):
-    sources = []
+    direct_sources = []
     if hasattr(ctx.rule.attr, "srcs"):
         for src in ctx.rule.files.srcs:
             if _is_cc_source(src.path):
-                sources.append(src)
+                direct_sources.append(src)
 
-    return [CppSourceCollectorInfo(sources = sources)]
+    transitive_sources = []
+    if hasattr(ctx.rule.attr, "deps"):
+        for dep in ctx.rule.attr.deps:
+            if CppSourceCollectorInfo in dep:
+                transitive_sources.append(dep[CppSourceCollectorInfo].sources)
+
+    return [
+        CppSourceCollectorInfo(
+            sources = depset(direct_sources, transitive = transitive_sources),
+        ),
+    ]
 
 _cpp_source_collector_aspect = aspect(
     implementation = _cpp_source_collector_aspect_impl,
     attr_aspects = ["deps"],
+    provides = [CppSourceCollectorInfo],
 )
 
 def _strip_external(p):
@@ -98,6 +109,7 @@ def _ecsact_build_recipe(ctx):
 
     sources = []
     recipe_data = []
+    defines_map = {}
 
     source_paths = []
 
@@ -132,7 +144,7 @@ def _ecsact_build_recipe(ctx):
         cc_dep_compilation_contexts.append(cc_info.compilation_context)
 
         source_info = cc_dep[CppSourceCollectorInfo]
-        for src in source_info.sources:
+        for src in source_info.sources.to_list():
             source_paths.append({
                 "path": src.path,
                 "outdir": _source_outdir(src),
@@ -142,6 +154,14 @@ def _ecsact_build_recipe(ctx):
 
     if len(cc_dep_compilation_contexts) > 0:
         cc_dep_compilation_context = cc_common.merge_compilation_contexts(compilation_contexts = cc_dep_compilation_contexts)
+        defines = cc_dep_compilation_context.defines.to_list() + cc_dep_compilation_context.local_defines.to_list()
+
+        for d in defines:
+            pair = d.split("=", 1)
+            key = pair[0]
+            value = pair[1] if len(pair) > 1 else ""
+
+            defines_map[key] = value
 
         for hdr in cc_dep_compilation_context.headers.to_list():
             hdr_prefix = ""
@@ -181,6 +201,7 @@ def _ecsact_build_recipe(ctx):
 
     recipe = {
         "name": ctx.attr.name,
+        "defines": defines_map,
         "sources": sources,
         "imports": ctx.attr.imports,
         "system_libs": ctx.attr.system_libs,
@@ -205,6 +226,7 @@ ecsact_build_recipe = rule(
         "srcs": attr.label_list(
             allow_files = True,
         ),
+        "defines": attr.string_dict(),
         "cc_deps": attr.label_list(
             providers = [CcInfo],
             aspects = [_cpp_source_collector_aspect],
