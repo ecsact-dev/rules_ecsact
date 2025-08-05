@@ -15,7 +15,14 @@ CPP_HEADER_SUFFIXES = [
     ".h",
     ".hpp",
     ".inl",
+    ".ipp",
 ]
+
+def _is_cc_header(p):
+    for cpp_header_suffix in CPP_HEADER_SUFFIXES:
+        if p.endswith(cpp_header_suffix):
+            return True
+    return False
 
 def _strip_external(p):
     # type: (string) -> string
@@ -27,9 +34,8 @@ def _strip_external(p):
 def _source_outdir(src):
     # type: (File) -> string
     src_path = src.path
-    for cpp_header_suffix in CPP_HEADER_SUFFIXES:
-        if src.path.endswith(cpp_header_suffix):
-            return "include/" + _strip_external(src.dirname)
+    if _is_cc_header(src.path):
+        return "include/" + _strip_external(src.dirname)
     return _strip_external(src.dirname)
 
 def _dedup_sources(source_paths):
@@ -88,6 +94,9 @@ def _ecsact_build_recipe(ctx):
 
         for hdr in cc_dep_compilation_context.headers.to_list():
             hdr_prefix = ""
+
+            if not _is_cc_header(hdr.path):
+                continue
 
             for quote_inc in cc_dep_compilation_context.quote_includes.to_list():
                 if hdr.path.startswith(quote_inc):
