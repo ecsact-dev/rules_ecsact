@@ -18,17 +18,59 @@ CPP_HEADER_SUFFIXES = [
     ".ipp",
 ]
 
+CPP_SOURCE_SUFFIXES = [
+    ".c",
+    ".cc",
+    ".cpp",
+    ".cxx",
+    ".m",
+    ".mm",
+    ".S",
+    ".s",
+]
+
+CppSourceCollectorInfo = provider(
+    doc = "",
+    fields = {
+        "sources": "list of sources from cc libraries",
+    },
+)
+
 def _is_cc_header(p):
     for cpp_header_suffix in CPP_HEADER_SUFFIXES:
         if p.endswith(cpp_header_suffix):
             return True
     return False
 
+def _is_cc_source(p):
+    for suffix in CPP_SOURCE_SUFFIXES:
+        if p.endswith(suffix):
+            return True
+    return False
+
+def _cpp_source_collector_aspect_impl(target, ctx):
+    sources = []
+    if hasattr(ctx.rule.attr, "srcs"):
+        for src in ctx.rule.files.srcs:
+            if _is_cc_source(src.path):
+                sources.append(src)
+
+    return [CppSourceCollectorInfo(sources = sources)]
+
+_cpp_source_collector_aspect = aspect(
+    implementation = _cpp_source_collector_aspect_impl,
+    attr_aspects = ["deps"],
+)
+
 def _strip_external(p):
     # type: (string) -> string
     EXTERNAL_PREFIX = "external/"
     if p.startswith(EXTERNAL_PREFIX):
-        return p[p.index("/", len(EXTERNAL_PREFIX)) + 1:]
+        slash_after_external = p.find("/", len(EXTERNAL_PREFIX))
+        if slash_after_external != -1:
+            return p[slash_after_external + 1:]
+        else:
+            return ""
     return p
 
 def _source_outdir(src):
@@ -88,6 +130,15 @@ def _ecsact_build_recipe(ctx):
     for cc_dep in ctx.attr.cc_deps:
         cc_info = cc_dep[CcInfo]
         cc_dep_compilation_contexts.append(cc_info.compilation_context)
+
+        source_info = cc_dep[CppSourceCollectorInfo]
+        for src in source_info.sources:
+            source_paths.append({
+                "path": src.path,
+                "outdir": _source_outdir(src),
+                "relative_to_cwd": True,
+            })
+            recipe_data.append(src)
 
     if len(cc_dep_compilation_contexts) > 0:
         cc_dep_compilation_context = cc_common.merge_compilation_contexts(compilation_contexts = cc_dep_compilation_contexts)
@@ -156,6 +207,7 @@ ecsact_build_recipe = rule(
         ),
         "cc_deps": attr.label_list(
             providers = [CcInfo],
+            aspects = [_cpp_source_collector_aspect],
         ),
         "fetch_srcs": attr.string_list_dict(
             allow_empty = True,
