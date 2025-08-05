@@ -2,6 +2,15 @@
 All notable changes to this project will be documented in this file. See [conventional commits](https://www.conventionalcommits.org/) for commit guidelines.
 
 - - -
+## 0.5.11 - 2025-08-05
+#### Bug Fixes
+- filter out source files from header extraction - (febb0e8) - Ezekiel Warren
+- prevent duplicate sources when creating build recipe - (5e60be4) - Ezekiel Warren
+#### Features
+- collect sources from cc_deps into build recipe sources - (e5be6b8) - Ezekiel Warren
+
+- - -
+
 ## 0.5.10 - 2025-01-31
 #### Bug Fixes
 - system_libs is now properly being created in recipes - (f935f75) - Ezekiel Warren
